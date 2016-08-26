@@ -4,12 +4,12 @@
 
 Prerequisite: Maven
 
-Build your project, then run the following command:
+Build your project, 
 
 ```
 mvn clean package
 ```
-Build your project, then run the following command:
+then run the following command:
 
 ```
 mvn spring-boot:run
