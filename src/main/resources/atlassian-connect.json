@@ -1,0 +1,12 @@
+{
+  "key": "jira-clone-task",
+  "baseUrl": "http://localhost:${local.server.port}",
+  "name": "Clone Task",
+  "authentication": {
+    "type": "none"
+  },
+  "lifecycle": {
+    "installed": "/installed",
+    "uninstalled": "/uninstalled"
+  }
+}
