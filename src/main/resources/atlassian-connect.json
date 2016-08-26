@@ -1,9 +1,9 @@
 {
   "key": "jira-clone-task",
-  "baseUrl": "http://localhost:${local.server.port}",
+  "baseUrl": "https://f598d8ed.ngrok.io",
   "name": "Clone Task",
   "authentication": {
-    "type": "none"
+    "type": "jwt"
   },
   "lifecycle": {
     "installed": "/installed",
