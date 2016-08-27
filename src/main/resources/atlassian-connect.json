@@ -1,6 +1,6 @@
 {
   "key": "jira-clone-task",
-  "baseUrl": "http://localhost:8080",
+  "baseUrl": "https://02a47cd5.ngrok.io",
   "name": "Clone Task",
   "authentication": {
     "type": "jwt"
@@ -8,5 +8,22 @@
   "lifecycle": {
     "installed": "/installed",
     "uninstalled": "/uninstalled"
-  }
+  },
+  "modules": {
+         "webItems": [
+            {
+                "url": "/clone",
+                "name": {
+                    "value": "Jira Clone Task"
+                },
+                "location": "jira.project.sidebar.navigation",
+                "key": "jira-clone-task",
+                "params":{
+                 "auiIcon": "aui-iconfont-link"
+                }
+                
+            }
+        ]
+     }
 }
+

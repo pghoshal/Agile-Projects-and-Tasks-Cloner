@@ -1,0 +1,36 @@
+<html>
+    <head>
+       <script src="$atlassian-connect-all-js-url" type="text/javascript"></script>
+<script src="$atlassian-connect-license" type="text/javascript"></script>
+<script src="$atlassian-connect-locale" type="text/javascript"></script>
+<script src="$atlassian-connect-timezone" type="text/javascript"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/css/aui.css" media="all">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="all">
+<!--[if lt IE 9]><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/css/aui-ie.css" media="all"><![endif]-->
+<!--[if IE 9]><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/css/aui-ie9.css" media="all"><![endif]-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/js/aui.js"></script>
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/js/aui-ie.js"></script><![endif]-->
+<script src="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/js/aui-datepicker.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/css/aui-experimental.css" media="all">
+<script src="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/js/aui-experimental.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/js/aui-soy.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/js/aui-soy.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ </head>
+    <body>
+      <div class="row" style="margin-top: 20px;"></div>
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <h3>Welcome to agile projects cloner</h3>
+          <p style="margin-top: 20px;">Agile Project Cloner is here to help you clone tasks from one single project and copy them to another project in your JIRA Cloud Instance. Please note that the tasks you will copy and move to another project will still remain in your original project therefore you can easily progress any work on them and on the project. </p>
+        </div>
+      <div class="col-md-1">
+   
+    
+        
+  
+    </body>
+</html>

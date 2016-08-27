@@ -13,10 +13,18 @@ import com.atlassian.connect.spring.IgnoreJwt;
 public class CloneTaskController
 {
 	@RequestMapping(value = "/sample", method = RequestMethod.GET)
-	public ModelAndView helloWorld(@RequestParam String username) {
+	public ModelAndView sample(@RequestParam String username) {
 	    ModelAndView model = new ModelAndView();
 	    model.setViewName("test");
 	    model.addObject("userName", username);
+	    return model;
+	}
+	
+	@RequestMapping(value = "/clone", method = RequestMethod.GET)
+	public ModelAndView cloneIssue() {
+	    ModelAndView model = new ModelAndView();
+	    model.setViewName("copyIssue");
+	    model.addObject("test", "test");
 	    return model;
 	}
 }
