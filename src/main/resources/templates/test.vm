@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 
 <html lang="en">
+<head>
+<script src="$atlassian-connect-all-js-url" type="text/javascript"></script>
+<script src="$atlassian-connect-license" type="text/javascript"></script>
+<script src="$atlassian-connect-locale" type="text/javascript"></script>
+<script src="$atlassian-connect-timezone" type="text/javascript"></script>
+</head>
 <body>
     Hi $userName!
     ...
