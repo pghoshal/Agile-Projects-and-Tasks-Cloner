@@ -30,6 +30,11 @@
             <artifactId>atlassian-connect-spring-boot-jpa-starter</artifactId>
             <version>${atlassian-connect-spring-boot.version}</version>
         </dependency>
+         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-velocity -->
+				<dependency>
+				    <groupId>org.springframework.boot</groupId>
+				    <artifactId>spring-boot-starter-velocity</artifactId>
+				</dependency>
     </dependencies>
 
     <build>
