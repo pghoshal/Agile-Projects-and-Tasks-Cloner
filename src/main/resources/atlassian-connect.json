@@ -18,9 +18,11 @@
                 },
                 "location": "jira.project.sidebar.navigation",
                 "key": "jira-clone-task",
-                "params":{
-                 "auiIcon": "aui-iconfont-link"
-                }
+                "icon": {
+		          "width": 80,
+		          "height": 80,
+		          "url": "/zoom-button.png"
+		        }
                 
             }
         ]
