@@ -2,7 +2,6 @@
     <head>
 
 <script src="/js/jquery.min.js"></script>
-<script src="/js/sinon.js"></script>
 <script src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui.js"></script>
 <script src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui-experimental.js"></script>
 <script src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui-datepicker.js"></script>
