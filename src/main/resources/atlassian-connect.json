@@ -1,6 +1,6 @@
 {
   "key": "jira-clone-task",
-  "baseUrl": "https://774ea277.ngrok.io/",
+  "baseUrl": "https://c62974f1.ngrok.io",
   "name": "Clone Task",
   "authentication": {
     "type": "jwt"
