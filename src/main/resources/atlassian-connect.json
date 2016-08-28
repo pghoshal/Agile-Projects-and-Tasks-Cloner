@@ -1,6 +1,6 @@
 {
   "key": "jira-clone-task",
-  "baseUrl": "https://02a47cd5.ngrok.io",
+  "baseUrl": "https://774ea277.ngrok.io/",
   "name": "Clone Task",
   "authentication": {
     "type": "jwt"
@@ -10,7 +10,7 @@
     "uninstalled": "/uninstalled"
   },
   "modules": {
-         "webItems": [
+         "generalPages": [
             {
                 "url": "/clone",
                 "name": {

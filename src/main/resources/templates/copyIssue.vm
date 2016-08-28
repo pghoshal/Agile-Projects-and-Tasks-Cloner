@@ -5,6 +5,7 @@
 <script src="$atlassian-connect-locale" type="text/javascript"></script>
 <script src="$atlassian-connect-timezone" type="text/javascript"></script>
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/css/aui.css" media="all">
+ <link rel="stylesheet" href="//aui-cdn.atlassian.com/aui-adg/5.9.12/css/aui.min.css" media="all">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="all">
 <!--[if lt IE 9]><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/css/aui-ie.css" media="all"><![endif]-->
 <!--[if IE 9]><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/css/aui-ie9.css" media="all"><![endif]-->
@@ -15,7 +16,7 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/css/aui-experimental.css" media="all">
 <script src="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/js/aui-experimental.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/js/aui-soy.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/aui/5.2/js/aui-soy.js"></script>
+
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
  </head>
@@ -28,5 +29,26 @@
           <p style="margin-top: 20px;">Agile Project Cloner is here to help you clone tasks from one single project and copy them to another project in your JIRA Cloud Instance. Please note that the tasks you will copy and move to another project will still remain in your original project therefore you can easily progress any work on them and on the project. </p>
         </div>
       <div class="col-md-1">
+     
+     <script id="connect-loader" data-options="sizeToParent:true;">
+         (function() {
+             var getUrlParam = function (param) {
+                 var codedParam = (new RegExp(param + '=([^&]*)')).exec(window.location.search)[1];
+                 return decodeURIComponent(codedParam);
+             };
+
+             var baseUrl = getUrlParam('xdm_e') + getUrlParam('cp');
+             var options = document.getElementById('connect-loader').getAttribute('data-options');
+
+             var script = document.createElement("script");
+             script.src = baseUrl + '/atlassian-connect/all.js';
+
+             if(options) {
+                 script.setAttribute('data-options', options);
+             }
+
+             document.getElementsByTagName("head")[0].appendChild(script);
+         })();
+     </script>
     </body>
 </html>
