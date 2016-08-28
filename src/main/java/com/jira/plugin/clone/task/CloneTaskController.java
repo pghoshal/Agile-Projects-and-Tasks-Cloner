@@ -45,7 +45,7 @@ public class CloneTaskController
         Iterator<BasicProject> iterator = restClient.getProjectClient().getAllProjects().claim().iterator();
         for(Iterator<BasicProject> i = iterator; i.hasNext(); ) {
         	BasicProject item = i.next();
-        	 s=item.getName();
+        	 s=item.getName()+item.getId()+item.getKey();
         	}
 	    model.setViewName("copyIssue");
 	    model.addObject("pname", s);

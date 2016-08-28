@@ -1,6 +1,9 @@
 <html>
     <head>
-
+<script src="$atlassian-connect-all-js-url" type="text/javascript"></script>
+<script src="$atlassian-connect-license" type="text/javascript"></script>
+<script src="$atlassian-connect-locale" type="text/javascript"></script>
+<script src="$atlassian-connect-timezone" type="text/javascript"></script>
 <script src="/js/jquery.min.js"></script>
 <script src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui.js"></script>
 <script src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui-experimental.js"></script>
@@ -98,5 +101,7 @@
              document.getElementsByTagName("head")[0].appendChild(script);
          })();
      </script>
+     
+     Hello $pname
     </body>
 </html>
