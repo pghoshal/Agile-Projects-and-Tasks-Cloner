@@ -1,4 +1,4 @@
-## jira-clone-task
+## Agile-Projects-and-Tasks-Cloner
 
 ### This jira plugin project can selectively copy tasks from one project to another.Jira admin can also filter the tasks via issue level
 
