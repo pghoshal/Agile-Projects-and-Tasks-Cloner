@@ -1,9 +1,9 @@
 {
   "key": "agile-projects-and-tasks-cloner",
-  "baseUrl": "https://9b039fea.ngrok.io",
+  "baseUrl": "https://c85a207e.ngrok.io",
   "name": "Agile Projects and Tasks Cloner",
   "authentication": {
-    "type": "jwt"
+    "type": "none"
   },
   "lifecycle": {
     "installed": "/installed",
@@ -14,14 +14,14 @@
             {
                 "url": "/clone",
                 "name": {
-                    "value": "Jira Clone Task"
+                    "value": "Agile Projects and Tasks Cloner"
                 },
                 "location": "jira.project.sidebar.navigation",
                 "key": "jira-clone-task",
                 "icon": {
 		          "width": 80,
 		          "height": 80,
-		          "url": "/zoom-button.png"
+		          "url": "/icon-clone.svg"
 		        }
                 
             }

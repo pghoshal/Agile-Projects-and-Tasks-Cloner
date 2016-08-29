@@ -43,6 +43,7 @@ public class CloneTaskController
         final URI jiraServerUri = new URI("https://prasenjitghoshal.atlassian.net");
         final JiraRestClient restClient = factory.createWithBasicHttpAuthentication(jiraServerUri, "admin", "123456789");
         Iterator<BasicProject> iterator = restClient.getProjectClient().getAllProjects().claim().iterator();
+        //IssueTypeSchemeManager
         for(Iterator<BasicProject> i = iterator; i.hasNext(); ) {
         	BasicProject item = i.next();
         	 s=item.getName()+item.getId()+item.getKey();
