@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>com.jira.plugin.clone.task</groupId>
-    <artifactId>jira-clone-task</artifactId>
+    <artifactId>Agile-Projects-and-Tasks-Cloner</artifactId>
     <version>1.0-SNAPSHOT</version>
     
     

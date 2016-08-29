@@ -1,7 +1,7 @@
 {
-  "key": "jira-clone-task",
-  "baseUrl": "https://c62974f1.ngrok.io",
-  "name": "Clone Task",
+  "key": "agile-projects-and-tasks-cloner",
+  "baseUrl": "https://9b039fea.ngrok.io",
+  "name": "Agile Projects and Tasks Cloner",
   "authentication": {
     "type": "jwt"
   },
