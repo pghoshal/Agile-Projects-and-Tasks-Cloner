@@ -10,10 +10,13 @@
 <script src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui-datepicker.js"></script>
 <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.10.1/css/aui.css"/>
 <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.10.1/css/aui-experimental.css"/>
+<link rel="stylesheet" type="text/css" href="/css/custom.css"/>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="all">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="/js/custom.js"></script>
+
  </head>
     <body>
       <div class="row" style="margin-top: 15px;"></div>
@@ -65,12 +68,11 @@
 	         <div class="row" style="margin-top: 20px;">
 	         	 <div class="col-md-2"></div>
 		         <div class="col-md-8" style="margin-left: 65px;">
-		         <button class="aui-button aui-button-primary" name="task" id="task_id">TASKS</button>
-		         <button class="aui-button aui-button-primary" name="story" id="story_id">USER STORIES</button>
-		         <button class="aui-button aui-button-primary" name="request" id="request_id">FEATURE REQUESTS</button>
-		         <button class="aui-button aui-button-primary" name="bug" id="bug_id">BUGS</button>
-		         <button class="aui-button aui-button-primary" name="subtask" id="subtask_id">SUB TASKS</button>
-		         
+		         <button class="aui-button aui-button-primary" id="jQueryColorChange">TASKS</button>
+		         <button class="aui-button aui-button-primary" id="jQueryColorChange">USER STORIES</button>
+		         <button class="aui-button aui-button-primary" id="jQueryColorChange">FEATURE REQUESTS</button>
+		         <button class="aui-button aui-button-primary" id="jQueryColorChange">BUGS</button>
+		         <button class="aui-button aui-button-primary" id="jQueryColorChange">SUB TASKS</button>
 		         </div>
 	         </div>
 	         	<div class="row" style="margin-top: 20px;">
@@ -85,7 +87,7 @@
 	        
         	</div>
         	<div class="row" style="margin-top: 40px;">
-        	<form action="/copyallissues" method="POST">
+        	<form action="/copyissues" method="POST">
 	        	<div class="col-md-3"></div>
 	         	<div class="col-md-6">
 	         	I WANT TO COPY ALL OF ISSUES   <button class="aui-button aui-button-primary">LOAD ALL ISSUE</button>
@@ -118,6 +120,5 @@
          })();
      </script>
      
-     Hello $pname
     </body>
 </html>

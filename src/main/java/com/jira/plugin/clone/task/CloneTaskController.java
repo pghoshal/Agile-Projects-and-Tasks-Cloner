@@ -63,6 +63,7 @@ public class CloneTaskController
 			e.printStackTrace();
 		}
         projectList = new ArrayList<BasicProject>();
+        //IssueTypeSchemeManager
         for(Iterator<BasicProject> i = iterator; i.hasNext(); ) {
         	BasicProject item = i.next();
         	
