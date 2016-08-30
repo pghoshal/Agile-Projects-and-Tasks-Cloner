@@ -74,28 +74,35 @@
 		         <button class="aui-button aui-button-primary" id="jQueryColorChange">BUGS</button>
 		         <button class="aui-button aui-button-primary" id="jQueryColorChange">SUB TASKS</button>
 		         </div>
+		          <div class="col-md-2"></div>
 	         </div>
 	         	<div class="row" style="margin-top: 20px;">
 	         	<form action="/copyissues" method="POST">
 	         		<div class="col-md-3"></div>
 	         		<div class="col-md-6">
-	         		I WANT TO COPY CUSTOM ISSUE TYPES   <button class="aui-button aui-button-primary">LOAD CUSTOM ISSUE</button>
+	         		<table cellspacing="5">
+	         		<tr>
+	         		<td valign="middle" style="padding-right:30px">
+	         		<p style="font-size:13px">I WANT TO COPY CUSTOM ISSUE TYPES </p>  
+	         		</td>
+	         		<td valign="middle">
+	         		<button class="aui-button aui-button-primary">LOAD CUSTOM ISSUE</button>
+	         		</td>
+	         		</tr>
+	         		<tr style="margin-top: 20px;">
+	         		<td valign="middle">
+	         		<p style="font-size:13px">I WANT TO COPY ALL OF ISSUES</p>
+	         		</td>
+	         		<td valign="middle">
+	         		 <button class="aui-button aui-button-primary">LOAD ALL ISSUE</button>
+	         		</td>
+	         		</tr>
+	         		</table>
 	         		</div>
 	       		</form>
 	         	<div class="col-md-3"></div>
 	         	</div>
-	        
         	</div>
-        	<div class="row" style="margin-top: 40px;">
-        	<form action="/copyissues" method="POST">
-	        	<div class="col-md-3"></div>
-	         	<div class="col-md-6">
-	         	I WANT TO COPY ALL OF ISSUES   <button class="aui-button aui-button-primary">LOAD ALL ISSUE</button>
-	         	</div>
-	       	</form>
-	         	<div class="col-md-3"></div>
-	         </div>
-	        
         </div>
         <div class="col-md-1"></div>
       </div>
@@ -119,6 +126,12 @@
              document.getElementsByTagName("head")[0].appendChild(script);
          })();
      </script>
-     
+     #foreach($commonIssueType in $commonIssueTypes)
+        					$commonIssueType
+        				#end
+        				
+        				#foreach($customIssueType in $customIssueTypes)
+        					$customIssueType
+        				#end
     </body>
 </html>
