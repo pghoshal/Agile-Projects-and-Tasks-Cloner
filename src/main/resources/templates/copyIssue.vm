@@ -29,11 +29,9 @@
 		           <form class="aui">
     				 <p>
         				<aui-select id="sync-product-single-select" name="product" placeholder="From project">
-				            <aui-option>Project A</aui-option>
-				            <aui-option>Project B</aui-option>
-				            <aui-option>Project C</aui-option>
-				            <aui-option>Project D</aui-option>
-				            <aui-option>Project E</aui-option>
+        				#foreach($project in $projectList)
+        					<aui-option id="$project.key">$project.name</aui-option>
+        				#end
         				</aui-select>
     				 </p>
 				    </form>
@@ -47,11 +45,9 @@
 		           <form class="aui">
     				 <p>
         				<aui-select id="sync-product-single-select" name="product" placeholder="To project">
-				            <aui-option>Project A</aui-option>
-				            <aui-option>Project B</aui-option>
-				            <aui-option>Project C</aui-option>
-				            <aui-option>Project D</aui-option>
-				            <aui-option>Project E</aui-option>
+        				#foreach($project in $projectList)
+        					<aui-option>$project.name</aui-option>
+        				#end
         				</aui-select>
     				 </p>
 				    </form>
@@ -69,15 +65,35 @@
 	         <div class="row" style="margin-top: 20px;">
 	         	 <div class="col-md-2"></div>
 		         <div class="col-md-8" style="margin-left: 65px;">
-		         <button class="aui-button aui-button-primary">TASKS</button>
-		         <button class="aui-button aui-button-primary">USER STORIES</button>
-		         <button class="aui-button aui-button-primary">FEATURE REQUESTS</button>
-		         <button class="aui-button aui-button-primary">BUGS</button>
-		         <button class="aui-button aui-button-primary">SUB TASKS</button>
+		         <button class="aui-button aui-button-primary" name="task" id="task_id">TASKS</button>
+		         <button class="aui-button aui-button-primary" name="story" id="story_id">USER STORIES</button>
+		         <button class="aui-button aui-button-primary" name="request" id="request_id">FEATURE REQUESTS</button>
+		         <button class="aui-button aui-button-primary" name="bug" id="bug_id">BUGS</button>
+		         <button class="aui-button aui-button-primary" name="subtask" id="subtask_id">SUB TASKS</button>
+		         
 		         </div>
-		         <div class="col-md-2"></div>
 	         </div>
-	         
+	         	<div class="row" style="margin-top: 20px;">
+	         	<form action="/copyissues" method="POST">
+	         		<div class="col-md-3"></div>
+	         		<div class="col-md-6">
+	         		I WANT TO COPY CUSTOM ISSUE TYPES   <button class="aui-button aui-button-primary">LOAD CUSTOM ISSUE</button>
+	         		</div>
+	       		</form>
+	         	<div class="col-md-3"></div>
+	         	</div>
+	        
+        	</div>
+        	<div class="row" style="margin-top: 40px;">
+        	<form action="/copyallissues" method="POST">
+	        	<div class="col-md-3"></div>
+	         	<div class="col-md-6">
+	         	I WANT TO COPY ALL OF ISSUES   <button class="aui-button aui-button-primary">LOAD ALL ISSUE</button>
+	         	</div>
+	       	</form>
+	         	<div class="col-md-3"></div>
+	         </div>
+	        
         </div>
         <div class="col-md-1"></div>
       </div>
