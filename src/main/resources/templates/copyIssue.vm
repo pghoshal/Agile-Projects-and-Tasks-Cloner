@@ -86,7 +86,7 @@
 	         		<p style="font-size:13px">I WANT TO COPY CUSTOM ISSUE TYPES </p>  
 	         		</td>
 	         		<td valign="middle">
-	         		<button class="aui-button aui-button-primary">LOAD CUSTOM ISSUE</button>
+	         		<button class="aui-button aui-button-primary" style="background:#E78270;">LOAD CUSTOM ISSUE</button>
 	         		</td>
 	         		</tr>
 	         		<tr style="margin-top: 20px;">
@@ -94,7 +94,7 @@
 	         		<p style="font-size:13px">I WANT TO COPY ALL OF ISSUES</p>
 	         		</td>
 	         		<td valign="middle">
-	         		 <button class="aui-button aui-button-primary">LOAD ALL ISSUE</button>
+	         		 <button class="aui-button aui-button-primary" style="background:#E78270;">LOAD ALL ISSUE</button>
 	         		</td>
 	         		</tr>
 	         		</table>
