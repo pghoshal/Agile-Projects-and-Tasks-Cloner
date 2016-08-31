@@ -11,9 +11,9 @@
 <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.10.1/css/aui.css"/>
 <link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.10.1/css/aui-experimental.css"/>
 <link rel="stylesheet" type="text/css" href="/css/custom.css"/>
+<script src="/js/sinon.js"></script>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="all">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="/js/custom.js"></script>
 
@@ -68,11 +68,33 @@
 	         <div class="row" style="margin-top: 20px;">
 	         	 <div class="col-md-2"></div>
 		         <div class="col-md-8" style="margin-left: 65px;">
-		         <button class="aui-button aui-button-primary" id="jQueryColorChange">TASKS</button>
-		         <button class="aui-button aui-button-primary" id="jQueryColorChange">USER STORIES</button>
-		         <button class="aui-button aui-button-primary" id="jQueryColorChange">FEATURE REQUESTS</button>
-		         <button class="aui-button aui-button-primary" id="jQueryColorChange">BUGS</button>
-		         <button class="aui-button aui-button-primary" id="jQueryColorChange">SUB TASKS</button>
+		         <button class="aui-button aui-button-primary dialog-show-button-custom" id="dialog-show-button">TASKS</button>
+		         <button class="aui-button aui-button-primary dialog-show-button-custom" id="dialog-show-button-2">USER STORIES</button>
+		         <button class="aui-button aui-button-primary dialog-show-button-custom" id="dialog-show-button-3">FEATURE REQUESTS</button>
+		         <button class="aui-button aui-button-primary dialog-show-button-custom" id="dialog-show-button-4">BUGS</button>
+		         <button class="aui-button aui-button-primary dialog-show-button-custom" id="dialog-show-button-5">SUB TASKS</button>
+		         
+				` <section role="dialog" id="demo-dialog" class="aui-layer aui-dialog2 aui-dialog2-medium" aria-hidden="true">
+				    	<!-- Dialog header -->
+				   		<header class="aui-dialog2-header">
+					   		<!-- The dialog's title -->
+					   		<h2 class="aui-dialog2-header-main">List of Tasks</h2>
+						</header>
+						<!-- Main dialog content -->
+						<div class="aui-dialog2-content">
+						     <p>Hello World</p>
+						</div>
+						<!-- Dialog footer -->
+						<footer class="aui-dialog2-footer">
+						       <!-- Actions to render on the right of the footer -->
+						       <div class="aui-dialog2-footer-actions">
+						            <button id="dialog-submit-button" class="aui-button aui-button-primary">OK</button>
+						            <button id="dialog-close-button" class="aui-button aui-button-link">Close</button>
+						       </div>
+						</footer>
+					</section>
+    	
+		         
 		         </div>
 		          <div class="col-md-2"></div>
 	         </div>
@@ -125,6 +147,8 @@
 
              document.getElementsByTagName("head")[0].appendChild(script);
          })();
+         
+	
      </script>
      #foreach($commonIssueType in $commonIssueTypes)
         					$commonIssueType

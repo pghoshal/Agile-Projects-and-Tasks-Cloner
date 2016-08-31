@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,10 +25,10 @@ import com.atlassian.connect.spring.IgnoreJwt;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.domain.BasicProject;
 import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.atlassian.jira.rest.client.api.domain.IssueType;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
 import com.atlassian.util.concurrent.Promise;
+import com.google.gson.Gson;
 
 @Controller
 @IgnoreJwt
@@ -40,6 +41,7 @@ public class CloneTaskController
 	private AsynchronousJiraRestClientFactory factory = AsynchronousJiraRestClientFactoryInstance.getInstance();
 	
 	private URI jiraServerUri = URIInstance.getInstance();
+	final JiraRestClient restClient = factory.createWithBasicHttpAuthentication(jiraServerUri, "admin", "123456789");
 	
 	@RequestMapping(value = "/sample", method = RequestMethod.GET)
 	public ModelAndView sample(@RequestParam String username) {
@@ -56,8 +58,6 @@ public class CloneTaskController
 	    String s=null;
 	    List<BasicProject> projectList = null;
 	    List<Issue> issueTypeList = null;
-	    
-        final JiraRestClient restClient = factory.createWithBasicHttpAuthentication(jiraServerUri, "admin", "123456789");
         Iterator<BasicProject> iterator = restClient.getProjectClient().getAllProjects().claim().iterator();
         Promise<SearchResult> issues = restClient.getSearchClient().searchJql("project=TD", 50000, 0, null);
         Set<String> commonIssueTypes=new HashSet<String>();
@@ -101,5 +101,46 @@ public class CloneTaskController
 	public ModelAndView submitIssues(@RequestBody String json ){
 		
 		return null;
+	}
+	
+	@RequestMapping(value="/issuetype" , method=RequestMethod.GET)
+	 
+	public @ResponseBody List<IssueDetail> fetchIssueFromType(@RequestParam String issueType,@RequestParam String projectID ){
+	
+		log.info("Inside fetchIssueFromType method ----");
+		List<Issue> issueTypeList =null;
+		List<IssueDetail> issueDataList = null;
+		
+		String jql = "project="+projectID+" AND type="+issueType;
+		log.info("JQL : "+jql);
+		Promise<SearchResult> issues = restClient.getSearchClient().searchJql(jql, 50000, 0, null);
+		log.info("issues found : "+issues);
+		IssueDetail issueDetail = null;
+		issueDataList = new ArrayList<IssueDetail>();
+        try {
+			SearchResult searchResult = issues.get();
+			issueTypeList = (List<Issue>) searchResult.getIssues();
+			for(Issue issue : issueTypeList){
+				
+				issueDetail = new IssueDetail();
+				issueDetail.setKey(issue.getKey());
+				issueDetail.setName(issue.getProject().getName());
+				issueDetail.setType(issue.getIssueType().getName());
+				issueDataList.add(issueDetail);
+			}
+			log.info("Issues count : "+issueDataList.size());
+			
+		} catch (InterruptedException e) {
+			log.info("Exception occured : "+e);
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			log.info("Exceution Exception occured : "+e);
+			e.printStackTrace();
+		}
+        /*Gson gson = new Gson();
+        String json = gson.toJson(issueDataList);
+        log.info("JSON Array : "+json);*/
+		
+		return issueDataList;
 	}
 }
