@@ -98,9 +98,23 @@ public class CloneTaskController
 	}
 
 	@RequestMapping(value="/copyissues" , method=RequestMethod.POST)
-	public ModelAndView submitIssues(@RequestBody String json ){
+	public @ResponseBody String submitIssues(@RequestBody CopyIssueDTO copyIssueDTO ){
 		
-		return null;
+		String p1 = copyIssueDTO.getProjectA();
+		String p2 = copyIssueDTO.getProjectB();
+		int size = copyIssueDTO.getIssues().size();
+		log.info(" P1:"+p1 + " P2:"+p2+" size : "+size);
+		for (String iterable_element : copyIssueDTO.getIssues()) {
+			log.info("List value : "+iterable_element);
+			
+		}
+		try {
+			Thread.sleep(3000, 100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return p1!=null && p2!=null && size>0 ?  "{"+"\"message\":\"success\""+"}" : "{"+"\"message\":\"error\""+"}";
 	}
 	
 	@RequestMapping(value="/issuetype" , method=RequestMethod.GET)

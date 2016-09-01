@@ -21,6 +21,9 @@
     <body>
       <div class="row" style="margin-top: 15px;"></div>
       <div class="row">
+      <div id="progress-bar" class="aui-progress-indicator">
+        <span class="aui-progress-indicator-value"></span>
+      </div>
         <div class="col-md-1"></div>
         <div class="col-md-10">
           <h3>Welcome to agile projects cloner</h3>
@@ -31,9 +34,9 @@
 		          <p style="margin-top: 15px;">STEP 1 SELECT THE PROJECT FROM WHICH YOU WANT TO COPY TASKS</p>
 		           <form class="aui">
     				 <p>
-        				<aui-select id="sync-product-single-select" name="product" placeholder="From project">
+        				<aui-select id="sync-product-single-select-1" name="product" placeholder="From project">
         				#foreach($project in $projectList)
-        					<aui-option id="$project.key">$project.name</aui-option>
+        					<aui-option value="$project.key">$project.name</aui-option>
         				#end
         				</aui-select>
     				 </p>
@@ -47,9 +50,9 @@
 		          <p style="margin-top: 20px;">STEP 2 SELECT THE PROJECT TO WHICH YOU WANT TO PASTE TASKS</p>
 		           <form class="aui">
     				 <p>
-        				<aui-select id="sync-product-single-select" name="product" placeholder="To project">
+        				<aui-select id="sync-product-single-select-2" name="product" placeholder="To project">
         				#foreach($project in $projectList)
-        					<aui-option>$project.name</aui-option>
+        					<aui-option value="$project.key">$project.name</aui-option>
         				#end
         				</aui-select>
     				 </p>
@@ -68,38 +71,15 @@
 	         <div class="row" style="margin-top: 20px;">
 	         	 <div class="col-md-2"></div>
 		         <div class="col-md-8" style="margin-left: 65px;">
-		         <button class="aui-button aui-button-primary dialog-show-button-custom" id="dialog-show-button">TASKS</button>
-		         <button class="aui-button aui-button-primary dialog-show-button-custom" id="dialog-show-button-2">USER STORIES</button>
-		         <button class="aui-button aui-button-primary dialog-show-button-custom" id="dialog-show-button-3">FEATURE REQUESTS</button>
-		         <button class="aui-button aui-button-primary dialog-show-button-custom" id="dialog-show-button-4">BUGS</button>
-		         <button class="aui-button aui-button-primary dialog-show-button-custom" id="dialog-show-button-5">SUB TASKS</button>
-		         
-				` <section role="dialog" id="demo-dialog" class="aui-layer aui-dialog2 aui-dialog2-medium" aria-hidden="true">
-				    	<!-- Dialog header -->
-				   		<header class="aui-dialog2-header">
-					   		<!-- The dialog's title -->
-					   		<h2 class="aui-dialog2-header-main">List of Tasks</h2>
-						</header>
-						<!-- Main dialog content -->
-						<div class="aui-dialog2-content">
-						     <p>Hello World</p>
-						</div>
-						<!-- Dialog footer -->
-						<footer class="aui-dialog2-footer">
-						       <!-- Actions to render on the right of the footer -->
-						       <div class="aui-dialog2-footer-actions">
-						            <button id="dialog-submit-button" class="aui-button aui-button-primary">OK</button>
-						            <button id="dialog-close-button" class="aui-button aui-button-link">Close</button>
-						       </div>
-						</footer>
-					</section>
-    	
-		         
+		         	<button class="aui-button aui-button-primary" value="task" id="dialog-show-button-1">TASKS</button>
+		         	<button class="aui-button aui-button-primary" value="story" id="dialog-show-button-2">USER STORIES</button>
+		         	<button class="aui-button aui-button-primary" value="request" id="dialog-show-button-3">FEATURE REQUESTS</button>
+		         	<button class="aui-button aui-button-primary" value="bug" id="dialog-show-button-4">BUGS</button>
+		         	<button class="aui-button aui-button-primary" value="subtask" id="dialog-show-button-5">SUB TASKS</button>
 		         </div>
 		          <div class="col-md-2"></div>
 	         </div>
 	         	<div class="row" style="margin-top: 20px;">
-	         	<form action="/copyissues" method="POST">
 	         		<div class="col-md-3"></div>
 	         		<div class="col-md-6">
 	         		<table cellspacing="5">
@@ -108,7 +88,7 @@
 	         		<p style="font-size:13px">I WANT TO COPY CUSTOM ISSUE TYPES </p>  
 	         		</td>
 	         		<td valign="middle">
-	         		<button class="aui-button aui-button-primary" style="background:#E78270;">LOAD CUSTOM ISSUE</button>
+	         		<button class="aui-button aui-button-primary" id="load-custom-button" style="background:#E78270;">LOAD CUSTOM ISSUE</button>
 	         		</td>
 	         		</tr>
 	         		<tr style="margin-top: 20px;">
@@ -116,12 +96,11 @@
 	         		<p style="font-size:13px">I WANT TO COPY ALL OF ISSUES</p>
 	         		</td>
 	         		<td valign="middle">
-	         		 <button class="aui-button aui-button-primary" style="background:#E78270;">LOAD ALL ISSUE</button>
+	         		 <button class="aui-button aui-button-primary" id="load-all-button" style="background:#E78270;">LOAD ALL ISSUE</button>
 	         		</td>
 	         		</tr>
 	         		</table>
 	         		</div>
-	       		</form>
 	         	<div class="col-md-3"></div>
 	         	</div>
         	</div>
@@ -148,14 +127,10 @@
              document.getElementsByTagName("head")[0].appendChild(script);
          })();
          
-	
      </script>
-     #foreach($commonIssueType in $commonIssueTypes)
-        					$commonIssueType
-        				#end
-        				
-        				#foreach($customIssueType in $customIssueTypes)
-        					$customIssueType
-        				#end
+     <script language="JavaScript" type="text/javascript">   
+       
+        
+    </script>
     </body>
 </html>
