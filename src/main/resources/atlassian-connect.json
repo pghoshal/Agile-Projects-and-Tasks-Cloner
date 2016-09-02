@@ -3,7 +3,7 @@
   "baseUrl": "https://c3c85b7b.ngrok.io",
   "name": "Agile Projects and Tasks Cloner",
   "authentication": {
-    "type": "none"
+    "type": "jwt"
   },
   "lifecycle": {
     "installed": "/installed",

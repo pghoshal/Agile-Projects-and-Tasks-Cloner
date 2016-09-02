@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,17 +23,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.atlassian.connect.spring.IgnoreJwt;
+import com.atlassian.connect.spring.AtlassianHost;
+import com.atlassian.connect.spring.AtlassianHostUser;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.domain.BasicProject;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
 import com.atlassian.util.concurrent.Promise;
-import com.google.gson.Gson;
 
 @Controller
-@IgnoreJwt
+
 public class CloneTaskController
 {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -53,7 +55,21 @@ public class CloneTaskController
 	}
 	
 	@RequestMapping(value = "/clone", method = RequestMethod.GET)
-	public ModelAndView cloneIssue() throws URISyntaxException {
+	public ModelAndView cloneIssue(@AuthenticationPrincipal AtlassianHostUser hostUser) throws URISyntaxException {
+		AtlassianHost host = hostUser.getHost();
+		Optional<String> userKey = hostUser.getUserKey();
+		String string = userKey.get();
+		log.info(host.getBaseUrl());
+		log.info(host.getClientKey());
+		log.info(host.getCreatedBy());
+		log.info(host.getDescription());
+		log.info(host.getLastModifiedBy());
+		log.info(host.getProductType());
+		log.info(host.getPublicKey());
+		log.info(host.getServiceEntitlementNumber());
+		log.info(host.getSharedSecret());
+		log.info(string);
+		log.info("=======================");
 	    ModelAndView model = new ModelAndView();
 	    String s=null;
 	    List<BasicProject> projectList = null;

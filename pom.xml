@@ -60,12 +60,12 @@
     <dependency>
         <groupId>com.atlassian.jira</groupId>
         <artifactId>jira-rest-java-client-api</artifactId>
-        <version>4.0.0</version>
+        <version>3.0.0</version>
     </dependency>
     <dependency>
         <groupId>com.atlassian.jira</groupId>
         <artifactId>jira-rest-java-client-core</artifactId>
-        <version>4.0.0</version>
+        <version>3.0.0</version>
     </dependency>
     <dependency>
         <groupId>com.google.guava</groupId>
@@ -93,7 +93,11 @@
     <artifactId>gson</artifactId>
     <version>2.7</version>
 </dependency>
-    
+    <dependency>
+     <groupId>com.atlassian.fugue</groupId>
+     <artifactId>fugue</artifactId>
+     <version>2.2.1</version>
+    </dependency>
     </dependencies>
     
 <repositories>
