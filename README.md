@@ -8,7 +8,7 @@ Spring Boot provides intelligent hot swapping. So each time you change your code
 
 Prerequisite: Maven
 
-git clone git@github.com:pghoshal/atlassian-connect-spring-boot.git
+git clone https://github.com/pghoshal/atlassian-connect-spring-boot.git
 
 then install it through mvn clean install to support the dependency in 
 Agile-Projects-and-Tasks-Cloner project.
