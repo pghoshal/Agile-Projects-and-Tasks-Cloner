@@ -111,6 +111,7 @@ public class CloneTaskController
 	   // model.addObject("customIssueTypes",customIssueTypes);
 	    
 	    model.addObject("projectList", projectList);
+	    model.addObject("hostUser", hostUser);
 	   // model.addObject("issueTypeList",issueTypeList);
 	    return model;
 	}
