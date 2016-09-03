@@ -15,9 +15,23 @@ public class CopyIssueDTO {
 	@SerializedName("project-b")
 	@Expose
 	private String projectB;
+	@SerializedName("baseUrl")
+	@Expose
+	private String baseUrl ;
+	
 	@SerializedName("issues")
 	@Expose
 	private List<String> issues = new ArrayList<String>();
+
+	public String getBaseUrl()
+	{
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl)
+	{
+		this.baseUrl = baseUrl;
+	}
 
 	/**
 	 * 

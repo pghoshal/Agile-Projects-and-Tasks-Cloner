@@ -83,13 +83,14 @@ $("#load-custom-button").on('click' ,function(){
         if (AJS.$("#progress-bar").attr("data-value")) {
             AJS.progressBars.setIndeterminate("#progress-bar");
         } 
+        var baseUrl= $('input#baseUrl').val()
 		// alert(task+ ' & '+ story + ' & '+request+' & '+bug+' & '+ subtask);
 		$.ajax({
 		    url: '/copyissues',
 		    dataType: 'json',
 		    type: 'post',
 		    contentType: 'application/json',
-		    data: JSON.stringify( { "projectA":dd1 , "projectB": dd2, "issues" :[task, story, request, bug, subtask] } ),
+		    data: JSON.stringify( { "projectA":dd1 , "projectB": dd2, "baseUrl" :baseUrl, "issues" :[task, story, request, bug, subtask] } ),
 		    processData: false,
 		    success: function( data, textStatus, jQxhr ){
 		        AJS.progressBars.update("#progress-bar", 1);

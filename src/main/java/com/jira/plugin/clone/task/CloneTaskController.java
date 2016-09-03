@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.atlassian.connect.spring.AtlassianHost;
 import com.atlassian.connect.spring.AtlassianHostUser;
+import com.atlassian.connect.spring.IgnoreJwt;
 import com.atlassian.connect.spring.internal.jira.rest.JiraRestClientFactory;
 import com.atlassian.connect.spring.internal.jira.rest.JiraRestClientFactoryImpl;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
@@ -111,18 +112,29 @@ public class CloneTaskController
 	   // model.addObject("customIssueTypes",customIssueTypes);
 	    
 	    model.addObject("projectList", projectList);
-	    model.addObject("hostUser", hostUser);
+	    model.addObject("baseUrl", host.getBaseUrl());
 	   // model.addObject("issueTypeList",issueTypeList);
 	    return model;
 	}
-
+	@IgnoreJwt
 	@RequestMapping(value="/copyissues" , method=RequestMethod.POST)
 	public @ResponseBody String submitIssues(@RequestBody CopyIssueDTO copyIssueDTO ){
+		AtlassianHost host=new AtlassianHost();
+		host.setBaseUrl(copyIssueDTO.getBaseUrl());
+		restClient = factory.createJiraRestClient(host, restTemplate);
+		
+		Iterator<BasicProject> iterator = restClient.getProjectClient().getAllProjects().claim().iterator();
+		 for(Iterator<BasicProject> i = iterator; i.hasNext(); ) {
+	        	BasicProject item = i.next();
+	        	log.info("======");
+	        	log.info(item.getName());
+	        }
 		
 		String p1 = copyIssueDTO.getProjectA();
 		String p2 = copyIssueDTO.getProjectB();
 		int size = copyIssueDTO.getIssues().size();
 		log.info(" P1:"+p1 + " P2:"+p2+" size : "+size);
+		log.info(copyIssueDTO.getBaseUrl());
 		for (String iterable_element : copyIssueDTO.getIssues()) {
 			log.info("List value : "+iterable_element);
 			
