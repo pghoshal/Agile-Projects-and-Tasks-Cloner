@@ -1,2 +1,12 @@
-spring.jpa.hibernate.ddl-auto: update
+spring.main.banner_mode: "off"
+spring.jpa.hibernate.ddl-auto: none
 spring.datasource.url: jdbc:hsqldb:file:addon-db # Use a file-based backing store for HSQL
+security:
+  user:
+    name: admin
+    password: secret
+  ignored: /no-auth
+
+
+
+

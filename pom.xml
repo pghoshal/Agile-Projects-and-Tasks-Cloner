@@ -58,14 +58,14 @@
         <version>1.9</version>
     </dependency>
     <dependency>
-        <groupId>com.atlassian.jira</groupId>
-        <artifactId>jira-rest-java-client-api</artifactId>
-        <version>3.0.0</version>
+        <groupId>com.atlassian.connect</groupId>
+        <artifactId>atlassian-connect-spring-boot-jira-rest</artifactId>
+        <version>${atlassian-connect-spring-boot.version}</version>
     </dependency>
     <dependency>
-        <groupId>com.atlassian.jira</groupId>
-        <artifactId>jira-rest-java-client-core</artifactId>
-        <version>3.0.0</version>
+        <groupId>com.atlassian.connect</groupId>
+        <artifactId>atlassian-connect-spring-boot-core</artifactId>
+        <version>${atlassian-connect-spring-boot.version}</version>
     </dependency>
     <dependency>
         <groupId>com.google.guava</groupId>
@@ -98,6 +98,7 @@
      <artifactId>fugue</artifactId>
      <version>2.2.1</version>
     </dependency>
+    
     </dependencies>
     
 <repositories>
@@ -173,7 +174,7 @@
         <java.version>1.8</java.version>
 	    <httpasyncclient.version>4.0-beta3-atlassian-1</httpasyncclient.version>
 	    <httpclient.version>4.2.1-atlassian-2</httpclient.version>
-        <atlassian-connect-spring-boot.version>1.0.0</atlassian-connect-spring-boot.version>
+        <atlassian-connect-spring-boot.version>1.0.1-SNAPSHOT</atlassian-connect-spring-boot.version>
     </properties>
 
 </project>

@@ -1,6 +1,5 @@
 package com.jira.plugin.clone.task;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,11 +24,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.atlassian.connect.spring.AtlassianHost;
 import com.atlassian.connect.spring.AtlassianHostUser;
+import com.atlassian.connect.spring.internal.jira.rest.JiraRestClientFactory;
+import com.atlassian.connect.spring.internal.jira.rest.JiraRestClientFactoryImpl;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.domain.BasicProject;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
-import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
 import com.atlassian.util.concurrent.Promise;
 
 @Controller
@@ -40,10 +40,10 @@ public class CloneTaskController
 	@Autowired
 	private RestTemplate restTemplate;
 
-	private AsynchronousJiraRestClientFactory factory = AsynchronousJiraRestClientFactoryInstance.getInstance();
+	@Autowired
+	private JiraRestClientFactory factory ;
 	
-	private URI jiraServerUri = URIInstance.getInstance();
-	final JiraRestClient restClient = factory.createWithBasicHttpAuthentication(jiraServerUri, "admin", "123456789");
+	JiraRestClient restClient;
 	
 	@RequestMapping(value = "/sample", method = RequestMethod.GET)
 	public ModelAndView sample(@RequestParam String username) {
@@ -56,60 +56,62 @@ public class CloneTaskController
 	
 	@RequestMapping(value = "/clone", method = RequestMethod.GET)
 	public ModelAndView cloneIssue(@AuthenticationPrincipal AtlassianHostUser hostUser) throws URISyntaxException {
+		factory = new JiraRestClientFactoryImpl();
 		AtlassianHost host = hostUser.getHost();
+		restClient = factory.createJiraRestClient(host, restTemplate);
 		Optional<String> userKey = hostUser.getUserKey();
 		String string = userKey.get();
-		log.info(host.getBaseUrl());
-		log.info(host.getClientKey());
-		log.info(host.getCreatedBy());
-		log.info(host.getDescription());
-		log.info(host.getLastModifiedBy());
-		log.info(host.getProductType());
-		log.info(host.getPublicKey());
-		log.info(host.getServiceEntitlementNumber());
-		log.info(host.getSharedSecret());
+		log.info("BaseUrl:"+host.getBaseUrl());
+		log.info("ClientKey:"+host.getClientKey());
+		log.info("CreatedBy:"+host.getCreatedBy());
+		log.info("Description:"+host.getDescription());
+		log.info("LastModifiedBy:"+host.getLastModifiedBy());
+		log.info("ProductType:"+host.getProductType());
+		log.info("PublicKey:"+host.getPublicKey());
+		log.info("ServiceEntitlementNumber:"+host.getServiceEntitlementNumber());
+		log.info("SharedSecret:"+host.getSharedSecret());
 		log.info(string);
 		log.info("=======================");
 	    ModelAndView model = new ModelAndView();
 	    String s=null;
 	    List<BasicProject> projectList = null;
 	    List<Issue> issueTypeList = null;
-        Iterator<BasicProject> iterator = restClient.getProjectClient().getAllProjects().claim().iterator();
-        Promise<SearchResult> issues = restClient.getSearchClient().searchJql("project=TD", 50000, 0, null);
-        Set<String> commonIssueTypes=new HashSet<String>();
-        Set<String> customIssueTypes=new HashSet<String>();
-        try {
-			SearchResult searchResult = issues.get();
-			issueTypeList = (List<Issue>) searchResult.getIssues();
-			for (Issue issue : issueTypeList)
-			{
-				if(issue.getIssueType().getName().equalsIgnoreCase("Story")||issue.getIssueType().getName().equalsIgnoreCase("Bug")||issue.getIssueType().getName().equalsIgnoreCase("Sub-task"))
-					{
-					commonIssueTypes.add(issue.getIssueType().getName());
-					
-					}else{
-						customIssueTypes.add(issue.getIssueType().getName());
-					}
-					log.info(issue.getIssueType().getName());
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
+	    Iterator<BasicProject> iterator = restClient.getProjectClient().getAllProjects().claim().iterator();
+        
+       // Promise<SearchResult> issues = restClient.getSearchClient().searchJql("project=TD", 50000, 0, null);
+//        Set<String> commonIssueTypes=new HashSet<String>();
+//        Set<String> customIssueTypes=new HashSet<String>();
+//        try {
+//			SearchResult searchResult = issues.get();
+//			issueTypeList = (List<Issue>) searchResult.getIssues();
+//			for (Issue issue : issueTypeList)
+//			{
+//				if(issue.getIssueType().getName().equalsIgnoreCase("Story")||issue.getIssueType().getName().equalsIgnoreCase("Bug")||issue.getIssueType().getName().equalsIgnoreCase("Sub-task"))
+//					{
+//					commonIssueTypes.add(issue.getIssueType().getName());
+//					
+//					}else{
+//						customIssueTypes.add(issue.getIssueType().getName());
+//					}
+//					log.info(issue.getIssueType().getName());
+//			}
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		} catch (ExecutionException e) {
+//			e.printStackTrace();
+//		}
         projectList = new ArrayList<BasicProject>();
         //IssueTypeSchemeManager
         for(Iterator<BasicProject> i = iterator; i.hasNext(); ) {
         	BasicProject item = i.next();
-        	
         	projectList.add(item);
         }
 	    model.setViewName("copyIssue");
-	    model.addObject("commonIssueTypes",commonIssueTypes);
-	    model.addObject("customIssueTypes",customIssueTypes);
+	    //model.addObject("commonIssueTypes",commonIssueTypes);
+	   // model.addObject("customIssueTypes",customIssueTypes);
 	    
 	    model.addObject("projectList", projectList);
-	    model.addObject("issueTypeList",issueTypeList);
+	   // model.addObject("issueTypeList",issueTypeList);
 	    return model;
 	}
 
