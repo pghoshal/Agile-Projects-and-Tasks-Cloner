@@ -19,7 +19,9 @@
 
  </head>
     <body>
-      <div class="row" style="margin-top: 15px;"></div>
+    <!-- / External dependencies -->
+    <div id="aui-message-bar"></div>
+      <div class="row" style="margin-top: 30px;"></div>
       <div class="row">
       <div id="progress-bar" class="aui-progress-indicator">
         <span class="aui-progress-indicator-value"></span>
@@ -29,11 +31,12 @@
         <div class="col-md-1"></div>
         <div class="col-md-10">
           <h3>Welcome to agile projects cloner</h3>
-          <p style="margin-top: 20px;">Agile Project Cloner is here to help you clone tasks from one single project and copy them to another project in your JIRA Cloud Instance. Please note that the tasks you will copy and move to another project will still remain in your original project therefore you can easily progress any work on them and on the project. </p>
+          <p style="margin-top: 10px;">Agile Project Cloner is here to help you clone tasks from one single project and copy them to another project in your JIRA Cloud Instance. Please note that the tasks you will copy and move to another project will still remain in your original project therefore you can easily progress any work on them and on the project. </p>
+	        <div class="error">Please Select</div>
 	        <div class="row">
 		        <div class="col-md-1"></div>
 		        <div class="col-md-10">
-		          <p style="margin-top: 15px;">STEP 1 SELECT THE PROJECT FROM WHICH YOU WANT TO COPY TASKS</p>
+		          <p style="margin-top: 5px;">STEP 1 SELECT THE PROJECT FROM WHICH YOU WANT TO COPY TASKS</p>
 		           <form class="aui">
     				 <p>
         				<aui-select id="sync-product-single-select-1" name="product" placeholder="From project">
@@ -49,7 +52,7 @@
 	        <div class="row">
 		        <div class="col-md-1"></div>
 		        <div class="col-md-10">
-		          <p style="margin-top: 20px;">STEP 2 SELECT THE PROJECT TO WHICH YOU WANT TO PASTE TASKS</p>
+		          <p style="margin-top: 5px;">STEP 2 SELECT THE PROJECT TO WHICH YOU WANT TO PASTE TASKS</p>
 		           <form class="aui">
     				 <p>
         				<aui-select id="sync-product-single-select-2" name="product" placeholder="To project">
@@ -65,7 +68,7 @@
 	         <div class="row">
 		         <div class="col-md-1"></div>
 		         <div class="col-md-10">
-		          <p style="margin-top: 15px;"> STEP 3 SELECT ISSUE TYPES YOU WANT TO COPY </p>
+		          <p style="margin-top: 5px;"> STEP 3 SELECT ISSUE TYPES YOU WANT TO COPY </p>
 		         </div>
 		         <div class="col-md-1"></div>
 	         </div>

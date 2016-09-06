@@ -76,8 +76,14 @@ $("#dialog-show-button-5").on('click',function(){
 $("#load-custom-button").on('click' ,function(){
 	var  dd1 = $("#sync-product-single-select-1").val();
 	var  dd2 = $("#sync-product-single-select-2").val();
-	if(dd1==dd2){
+	if(dd1==''){
+		alert('Please select From Project to copy')
+	}else if(dd2==''){
+		alert('Please select To Project');
+	}else if(dd1==dd2){
 		alert('Please select different projects to copy');
+	}else if(dd2=='' && dd1==''){
+		alert('Please select Projects to proceed');
 	} else {
 		$("#progress-bar").show();
         if (AJS.$("#progress-bar").attr("data-value")) {
@@ -95,11 +101,26 @@ $("#load-custom-button").on('click' ,function(){
 		    success: function( data, textStatus, jQxhr ){
 		        AJS.progressBars.update("#progress-bar", 1);
 		        $("#progress-bar").hide();
+		        AJS.flag({
+		            type: 'info',
+		            title: 'Issues have been created.',
+		            body: '<ul class="aui-nav-actions-list">' +
+		                '<li><a href="#">View issue</a></li>' +
+		                '<li><a href="#">Add to sprint</a></li>' +
+		            '</ul>'
+		        });
 		    },
 		    error: function( jqXhr, textStatus, errorThrown ){
-		    	alert('Error during copy: '+jqXhr);
 		        console.log( errorThrown );
 		        $("#progress-bar").hide();
+		        AJS.flag({
+		            type: 'error',
+		            title: 'Error during issue copy.',
+		            body: '<ul class="aui-nav-actions-list">' +
+		                '<li><a href="#">View issue</a></li>' +
+		                '<li><a href="#">Add to sprint</a></li>' +
+		            '</ul>'
+		        });
 		    }
 		});
 	}
