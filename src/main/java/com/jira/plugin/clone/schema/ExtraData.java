@@ -1,7 +1,5 @@
 package com.jira.plugin.clone.schema;
-
 import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 @Generated("org.jsonschema2pojo")

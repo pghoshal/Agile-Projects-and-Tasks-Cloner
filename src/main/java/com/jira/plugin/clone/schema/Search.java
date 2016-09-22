@@ -1,20 +1,17 @@
 package com.jira.plugin.clone.schema;
-
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.Generated;
-
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 
 /**
- * Search Results
+ * Issue
  * <p>
  * 
  * 
@@ -25,27 +22,78 @@ public class Search {
     @SerializedName("expand")
     @Expose
     private String expand;
-    @SerializedName("startAt")
+    @SerializedName("id")
     @Expose
-    private Integer startAt;
-    @SerializedName("maxResults")
+    private String id;
+    @SerializedName("self")
     @Expose
-    private Integer maxResults;
-    @SerializedName("total")
+    private URI self;
+    @SerializedName("key")
     @Expose
-    private Integer total;
-    @SerializedName("issues")
+    private String key;
+    @SerializedName("renderedFields")
     @Expose
-    private List<Issue> issues = new ArrayList<Issue>();
-    @SerializedName("warningMessages")
+    private RenderedFields renderedFields;
+    /**
+     * Properties
+     * <p>
+     * 
+     * 
+     */
+    @SerializedName("properties")
     @Expose
-    private List<String> warningMessages = new ArrayList<String>();
+    private Properties properties;
     @SerializedName("names")
     @Expose
-    private Names_ names;
+    private Names names;
     @SerializedName("schema")
     @Expose
-    private Schema_ schema;
+    private Schema schema;
+    @SerializedName("transitions")
+    @Expose
+    private List<Transition> transitions = new ArrayList<Transition>();
+    /**
+     * Opsbar
+     * <p>
+     * 
+     * 
+     */
+    @SerializedName("operations")
+    @Expose
+    private Operations operations;
+    /**
+     * Edit Meta
+     * <p>
+     * 
+     * 
+     */
+    @SerializedName("editmeta")
+    @Expose
+    private Editmeta editmeta;
+    /**
+     * Changelog
+     * <p>
+     * 
+     * 
+     */
+    @SerializedName("changelog")
+    @Expose
+    private Changelog changelog;
+    @SerializedName("versionedRepresentations")
+    @Expose
+    private VersionedRepresentations versionedRepresentations;
+    /**
+     * Included Fields
+     * <p>
+     * 
+     * 
+     */
+    @SerializedName("fieldsToInclude")
+    @Expose
+    private FieldsToInclude fieldsToInclude;
+    @SerializedName("fields")
+    @Expose
+    private Fields__ fields;
 
     /**
      * 
@@ -68,91 +116,97 @@ public class Search {
     /**
      * 
      * @return
-     *     The startAt
+     *     The id
      */
-    public Integer getStartAt() {
-        return startAt;
+    public String getId() {
+        return id;
     }
 
     /**
      * 
-     * @param startAt
-     *     The startAt
+     * @param id
+     *     The id
      */
-    public void setStartAt(Integer startAt) {
-        this.startAt = startAt;
-    }
-
-    /**
-     * 
-     * @return
-     *     The maxResults
-     */
-    public Integer getMaxResults() {
-        return maxResults;
-    }
-
-    /**
-     * 
-     * @param maxResults
-     *     The maxResults
-     */
-    public void setMaxResults(Integer maxResults) {
-        this.maxResults = maxResults;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
      * 
      * @return
-     *     The total
+     *     The self
      */
-    public Integer getTotal() {
-        return total;
+    public URI getSelf() {
+        return self;
     }
 
     /**
      * 
-     * @param total
-     *     The total
+     * @param self
+     *     The self
      */
-    public void setTotal(Integer total) {
-        this.total = total;
-    }
-
-    /**
-     * 
-     * @return
-     *     The issues
-     */
-    public List<Issue> getIssues() {
-        return issues;
-    }
-
-    /**
-     * 
-     * @param issues
-     *     The issues
-     */
-    public void setIssues(List<Issue> issues) {
-        this.issues = issues;
+    public void setSelf(URI self) {
+        this.self = self;
     }
 
     /**
      * 
      * @return
-     *     The warningMessages
+     *     The key
      */
-    public List<String> getWarningMessages() {
-        return warningMessages;
+    public String getKey() {
+        return key;
     }
 
     /**
      * 
-     * @param warningMessages
-     *     The warningMessages
+     * @param key
+     *     The key
      */
-    public void setWarningMessages(List<String> warningMessages) {
-        this.warningMessages = warningMessages;
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    /**
+     * 
+     * @return
+     *     The renderedFields
+     */
+    public RenderedFields getRenderedFields() {
+        return renderedFields;
+    }
+
+    /**
+     * 
+     * @param renderedFields
+     *     The renderedFields
+     */
+    public void setRenderedFields(RenderedFields renderedFields) {
+        this.renderedFields = renderedFields;
+    }
+
+    /**
+     * Properties
+     * <p>
+     * 
+     * 
+     * @return
+     *     The properties
+     */
+    public Properties getProperties() {
+        return properties;
+    }
+
+    /**
+     * Properties
+     * <p>
+     * 
+     * 
+     * @param properties
+     *     The properties
+     */
+    public void setProperties(Properties properties) {
+        this.properties = properties;
     }
 
     /**
@@ -160,7 +214,7 @@ public class Search {
      * @return
      *     The names
      */
-    public Names_ getNames() {
+    public Names getNames() {
         return names;
     }
 
@@ -169,7 +223,7 @@ public class Search {
      * @param names
      *     The names
      */
-    public void setNames(Names_ names) {
+    public void setNames(Names names) {
         this.names = names;
     }
 
@@ -178,7 +232,7 @@ public class Search {
      * @return
      *     The schema
      */
-    public Schema_ getSchema() {
+    public Schema getSchema() {
         return schema;
     }
 
@@ -187,8 +241,158 @@ public class Search {
      * @param schema
      *     The schema
      */
-    public void setSchema(Schema_ schema) {
+    public void setSchema(Schema schema) {
         this.schema = schema;
+    }
+
+    /**
+     * 
+     * @return
+     *     The transitions
+     */
+    public List<Transition> getTransitions() {
+        return transitions;
+    }
+
+    /**
+     * 
+     * @param transitions
+     *     The transitions
+     */
+    public void setTransitions(List<Transition> transitions) {
+        this.transitions = transitions;
+    }
+
+    /**
+     * Opsbar
+     * <p>
+     * 
+     * 
+     * @return
+     *     The operations
+     */
+    public Operations getOperations() {
+        return operations;
+    }
+
+    /**
+     * Opsbar
+     * <p>
+     * 
+     * 
+     * @param operations
+     *     The operations
+     */
+    public void setOperations(Operations operations) {
+        this.operations = operations;
+    }
+
+    /**
+     * Edit Meta
+     * <p>
+     * 
+     * 
+     * @return
+     *     The editmeta
+     */
+    public Editmeta getEditmeta() {
+        return editmeta;
+    }
+
+    /**
+     * Edit Meta
+     * <p>
+     * 
+     * 
+     * @param editmeta
+     *     The editmeta
+     */
+    public void setEditmeta(Editmeta editmeta) {
+        this.editmeta = editmeta;
+    }
+
+    /**
+     * Changelog
+     * <p>
+     * 
+     * 
+     * @return
+     *     The changelog
+     */
+    public Changelog getChangelog() {
+        return changelog;
+    }
+
+    /**
+     * Changelog
+     * <p>
+     * 
+     * 
+     * @param changelog
+     *     The changelog
+     */
+    public void setChangelog(Changelog changelog) {
+        this.changelog = changelog;
+    }
+
+    /**
+     * 
+     * @return
+     *     The versionedRepresentations
+     */
+    public VersionedRepresentations getVersionedRepresentations() {
+        return versionedRepresentations;
+    }
+
+    /**
+     * 
+     * @param versionedRepresentations
+     *     The versionedRepresentations
+     */
+    public void setVersionedRepresentations(VersionedRepresentations versionedRepresentations) {
+        this.versionedRepresentations = versionedRepresentations;
+    }
+
+    /**
+     * Included Fields
+     * <p>
+     * 
+     * 
+     * @return
+     *     The fieldsToInclude
+     */
+    public FieldsToInclude getFieldsToInclude() {
+        return fieldsToInclude;
+    }
+
+    /**
+     * Included Fields
+     * <p>
+     * 
+     * 
+     * @param fieldsToInclude
+     *     The fieldsToInclude
+     */
+    public void setFieldsToInclude(FieldsToInclude fieldsToInclude) {
+        this.fieldsToInclude = fieldsToInclude;
+    }
+
+    /**
+     * 
+     * @return
+     *     The fields
+     */
+    public Fields__ getFields() {
+        return fields;
+    }
+
+    /**
+     * 
+     * @param fields
+     *     The fields
+     */
+    public void setFields(Fields__ fields) {
+        this.fields = fields;
     }
 
     @Override
@@ -198,7 +402,7 @@ public class Search {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(expand).append(startAt).append(maxResults).append(total).append(issues).append(warningMessages).append(names).append(schema).toHashCode();
+        return new HashCodeBuilder().append(expand).append(id).append(self).append(key).append(renderedFields).append(properties).append(names).append(schema).append(transitions).append(operations).append(editmeta).append(changelog).append(versionedRepresentations).append(fieldsToInclude).append(fields).toHashCode();
     }
 
     @Override
@@ -210,7 +414,7 @@ public class Search {
             return false;
         }
         Search rhs = ((Search) other);
-        return new EqualsBuilder().append(expand, rhs.expand).append(startAt, rhs.startAt).append(maxResults, rhs.maxResults).append(total, rhs.total).append(issues, rhs.issues).append(warningMessages, rhs.warningMessages).append(names, rhs.names).append(schema, rhs.schema).isEquals();
+        return new EqualsBuilder().append(expand, rhs.expand).append(id, rhs.id).append(self, rhs.self).append(key, rhs.key).append(renderedFields, rhs.renderedFields).append(properties, rhs.properties).append(names, rhs.names).append(schema, rhs.schema).append(transitions, rhs.transitions).append(operations, rhs.operations).append(editmeta, rhs.editmeta).append(changelog, rhs.changelog).append(versionedRepresentations, rhs.versionedRepresentations).append(fieldsToInclude, rhs.fieldsToInclude).append(fields, rhs.fields).isEquals();
     }
 
 }
