@@ -93,7 +93,11 @@
 	         		<p style="font-size:13px">I WANT TO COPY CUSTOM ISSUE TYPES </p>  
 	         		</td>
 	         		<td valign="middle">
-	         		<button class="aui-button aui-button-primary" id="load-custom-button" style="background:#E78270;">LOAD CUSTOM ISSUE</button>
+	         		<!--<button class="aui-button aui-button-primary" id="load-custom-button" style="background:#E78270;">LOAD CUSTOM ISSUE</button>-->
+	         		<div class="field-group">
+       					 <select class="multi-select" size="5" multiple="multiple" id="multiselect" name="multiselect">
+				         </select>
+    				</div>
 	         		</td>
 	         		</tr>
 	         		<tr style="margin-top: 20px;">

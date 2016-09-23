@@ -73,7 +73,7 @@ $("#dialog-show-button-5").on('click',function(){
 			boolSubtask=false;
 		}
 });
-$("#load-custom-button").on('click' ,function(){
+$("#load-all-button").on('click' ,function(){
 	var  dd1 = $("#sync-product-single-select-1").val();
 	var  dd2 = $("#sync-product-single-select-2").val();
 	if(dd1==''){
@@ -125,6 +125,33 @@ $("#load-custom-button").on('click' ,function(){
 		});
 	}
 	
+});
+
+$("#sync-product-single-select-1").on("change", function (){
+	var dd1=$("#sync-product-single-select-1").val();
+	alert(dd1);
+	$.ajax({
+	    url: '/getcustomissue',
+	    dataType: 'json',
+	    type: 'post',
+	    contentType: 'application/json',
+	    data: JSON.stringify({ "projectA":dd1 }),
+	    processData: false,
+	    success: function( data, textStatus, jQxhr ){
+	        var array=[];
+	        array = data;
+	        alert("Data : "+data);
+	        var options='';
+	        for (var i = 0; i < array.length; i++) {
+	        	options += '<option value="' + array[i] + '">' + array[i] + '</option>';
+	        }
+	        $("#multiselect").html(options);
+	        alert("sucess");
+	    },
+	    error: function( jqXhr, textStatus, errorThrown ){
+	        alert("Error "+errorThrown);
+	    }
+	 });
 });
 
 });

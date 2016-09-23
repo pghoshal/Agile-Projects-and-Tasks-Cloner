@@ -2,11 +2,11 @@ package com.jira.plugin.clone.task;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
@@ -28,10 +28,18 @@ import com.atlassian.connect.spring.IgnoreJwt;
 import com.atlassian.connect.spring.internal.jira.rest.JiraRestClientFactory;
 import com.atlassian.connect.spring.internal.jira.rest.JiraRestClientFactoryImpl;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
+import com.atlassian.jira.rest.client.api.domain.BasicIssue;
 import com.atlassian.jira.rest.client.api.domain.BasicProject;
 import com.atlassian.jira.rest.client.api.domain.Issue;
+import com.atlassian.jira.rest.client.api.domain.IssueFieldId;
+import com.atlassian.jira.rest.client.api.domain.IssueType;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
+import com.atlassian.jira.rest.client.api.domain.input.FieldInput;
+import com.atlassian.jira.rest.client.api.domain.input.IssueInput;
 import com.atlassian.util.concurrent.Promise;
+import com.google.gson.Gson;
+import com.jira.plugin.clone.issuesearch.schema.SearchIssue;
+import com.jira.plugin.clone.search.schema.Search;
 
 @Controller
 
@@ -121,33 +129,62 @@ public class CloneTaskController
 	public @ResponseBody String submitIssues(@RequestBody CopyIssueDTO copyIssueDTO ){
 		AtlassianHost host=new AtlassianHost();
 		host.setBaseUrl(copyIssueDTO.getBaseUrl());
+		List<SearchIssue> searchIssueList = new ArrayList<SearchIssue>();
 		restClient = factory.createJiraRestClient(host, restTemplate);
+		List<String> issueKeyList = new ArrayList<String>();
 		
-		Iterator<BasicProject> iterator = restClient.getProjectClient().getAllProjects().claim().iterator();
-		 for(Iterator<BasicProject> i = iterator; i.hasNext(); ) {
-	        	BasicProject item = i.next();
-	        	log.info("======");
-	        	log.info(item.getName());
-	        }
+		Search search = restTemplate.getForObject("https://rajchettri.atlassian.net/rest/api/latest/search/", Search.class);
 		
 		String p1 = copyIssueDTO.getProjectA();
 		String p2 = copyIssueDTO.getProjectB();
 		int size = copyIssueDTO.getIssues().size();
 		log.info(" P1:"+p1 + " P2:"+p2+" size : "+size);
 		log.info(copyIssueDTO.getBaseUrl());
-		for (String iterable_element : copyIssueDTO.getIssues()) {
-			log.info("List value : "+iterable_element);
-			
+		for (com.jira.plugin.clone.search.schema.Issue issue : search.getIssues()) {
+			if(issue != null 
+					&& issue.getKey()!=null 
+					&& issue.getKey().contains(copyIssueDTO.getProjectA())){
+				issueKeyList.add(issue.getKey());
+				log.info(issue.getKey());
+			}
 		}
-		try {
-			Thread.sleep(3000, 100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Map<String, FieldInput> map = new HashMap<String, FieldInput>();
+		for (String issueKey : issueKeyList) {
+			SearchIssue issueSearch = restTemplate.getForObject("https://rajchettri.atlassian.net/rest/api/latest/issue/"+issueKey, SearchIssue.class);
+			if(copyIssueDTO.getIssues()!=null && copyIssueDTO.getIssues().equals(issueSearch.getFields().getIssuetype().getName())){
+				searchIssueList.add(issueSearch);
+				issueSearch.getFields();
+				FieldInput input1 = new FieldInput(IssueFieldId.PROJECT_FIELD, issueSearch.getFields());
+				FieldInput input2 = new FieldInput("expands", issueSearch.getExpand());
+				FieldInput input3 = new FieldInput("id", issueSearch.getId());
+				FieldInput input4 = new FieldInput("key", issueSearch.getKey());
+				FieldInput input5 = new FieldInput("self", issueSearch.getSelf());
+				map.put("fields", input1);
+				map.put("expands", input2);
+				map.put("id", input3);
+				map.put("key", input4);
+				map.put("self", input5);
+				IssueInput issue= new IssueInput(map);
+				
+				Promise<BasicIssue> createdIssue = restClient.getIssueClient().createIssue(issue);
+				try {
+					log.info(issueSearch.getId()+" :::: Issue Created"+createdIssue.get().getKey());
+				} catch (InterruptedException e) {
+					log.info(" Errror occurred : "+e);
+				} catch (ExecutionException e) {
+					log.info(" Errror occurred : "+e);
+				}
+			}
 		}
+		
+		IssueInput issue= new IssueInput(map );
+		
+		restClient.getIssueClient().createIssue(issue);
+		
 		return p1!=null && p2!=null && size>0 ?  "{"+"\"message\":\"success\""+"}" : "{"+"\"message\":\"error\""+"}";
 	}
 	
+	@IgnoreJwt
 	@RequestMapping(value="/issuetype" , method=RequestMethod.GET)
 	 
 	public @ResponseBody List<IssueDetail> fetchIssueFromType(@RequestParam String issueType,@RequestParam String projectID ){
@@ -182,10 +219,29 @@ public class CloneTaskController
 			log.info("Exceution Exception occured : "+e);
 			e.printStackTrace();
 		}
-        /*Gson gson = new Gson();
-        String json = gson.toJson(issueDataList);
-        log.info("JSON Array : "+json);*/
-		
 		return issueDataList;
+	}
+	
+	@IgnoreJwt
+	@RequestMapping(value="/getcustomissue" , method=RequestMethod.POST)
+	public @ResponseBody String getCustomIssue(@RequestBody CopyIssueDTO copyIssueDTO ){
+		
+		log.info("inside fetch custom issue ");
+		List<String> issueList = new ArrayList<String>();
+		String projectA = copyIssueDTO.getProjectA();
+		if(projectA != null){
+			log.info(projectA);
+			Iterator<IssueType> iterator = restClient.getProjectClient().getProject(projectA).claim().getIssueTypes().iterator();
+			while(iterator.hasNext()) {
+				String name = iterator.next().getName();
+				if(!("Task".equals(name) 
+						|| "Story".equals(name) 
+						|| "Bug".equals(name) 
+						|| "Epic".equals(name) 
+						|| "Sub-task".equals(name)))
+					issueList.add(name);
+			}
+		}
+		return new Gson().toJson(issueList);
 	}
 }
