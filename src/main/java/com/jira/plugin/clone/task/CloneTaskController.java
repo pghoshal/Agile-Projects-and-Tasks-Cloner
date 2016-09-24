@@ -133,7 +133,7 @@ public class CloneTaskController
 		restClient = factory.createJiraRestClient(host, restTemplate);
 		List<String> issueKeyList = new ArrayList<String>();
 		
-		Search search = restTemplate.getForObject("https://rajchettri.atlassian.net/rest/api/latest/search/", Search.class);
+		Search search = restTemplate.getForObject("https://annexchettri.atlassian.net/rest/api/latest/search/", Search.class);
 		
 		String p1 = copyIssueDTO.getProjectA();
 		String p2 = copyIssueDTO.getProjectB();
@@ -150,15 +150,15 @@ public class CloneTaskController
 		}
 		Map<String, FieldInput> map = new HashMap<String, FieldInput>();
 		for (String issueKey : issueKeyList) {
-			SearchIssue issueSearch = restTemplate.getForObject("https://rajchettri.atlassian.net/rest/api/latest/issue/"+issueKey, SearchIssue.class);
+			SearchIssue issueSearch = restTemplate.getForObject("https://annexchettri.atlassian.net/rest/api/latest/issue/"+issueKey, SearchIssue.class);
 			if(copyIssueDTO.getIssues()!=null && copyIssueDTO.getIssues().equals(issueSearch.getFields().getIssuetype().getName())){
 				searchIssueList.add(issueSearch);
 				issueSearch.getFields();
 				FieldInput input1 = new FieldInput(IssueFieldId.PROJECT_FIELD, issueSearch.getFields());
-				FieldInput input2 = new FieldInput("expands", issueSearch.getExpand());
-				FieldInput input3 = new FieldInput("id", issueSearch.getId());
-				FieldInput input4 = new FieldInput("key", issueSearch.getKey());
-				FieldInput input5 = new FieldInput("self", issueSearch.getSelf());
+				FieldInput input2 = new FieldInput(IssueFieldId.PROJECT_FIELD, issueSearch.getExpand());
+				FieldInput input3 = new FieldInput(IssueFieldId.PROJECT_FIELD, issueSearch.getId());
+				FieldInput input4 = new FieldInput(IssueFieldId.PROJECT_FIELD, issueSearch.getKey());
+				FieldInput input5 = new FieldInput(IssueFieldId.PROJECT_FIELD, issueSearch.getSelf());
 				map.put("fields", input1);
 				map.put("expands", input2);
 				map.put("id", input3);
@@ -178,7 +178,6 @@ public class CloneTaskController
 		}
 		
 		IssueInput issue= new IssueInput(map );
-		
 		restClient.getIssueClient().createIssue(issue);
 		
 		return p1!=null && p2!=null && size>0 ?  "{"+"\"message\":\"success\""+"}" : "{"+"\"message\":\"error\""+"}";
