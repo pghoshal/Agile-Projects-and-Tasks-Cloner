@@ -17,7 +17,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * 
  */
 @Generated("org.jsonschema2pojo")
-public class Search {
+public class IssueSearch {
 
     @SerializedName("expand")
     @Expose
@@ -410,10 +410,10 @@ public class Search {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Search) == false) {
+        if ((other instanceof IssueSearch) == false) {
             return false;
         }
-        Search rhs = ((Search) other);
+        IssueSearch rhs = ((IssueSearch) other);
         return new EqualsBuilder().append(expand, rhs.expand).append(id, rhs.id).append(self, rhs.self).append(key, rhs.key).append(renderedFields, rhs.renderedFields).append(properties, rhs.properties).append(names, rhs.names).append(schema, rhs.schema).append(transitions, rhs.transitions).append(operations, rhs.operations).append(editmeta, rhs.editmeta).append(changelog, rhs.changelog).append(versionedRepresentations, rhs.versionedRepresentations).append(fieldsToInclude, rhs.fieldsToInclude).append(fields, rhs.fields).isEquals();
     }
 
