@@ -80,7 +80,7 @@
 		         	<button class="aui-button aui-button-primary" value="story" id="dialog-show-button-2">USER STORIES</button>
 		         	<button class="aui-button aui-button-primary" value="request" id="dialog-show-button-3">FEATURE REQUESTS</button>
 		         	<button class="aui-button aui-button-primary" value="bug" id="dialog-show-button-4">BUGS</button>
-		         	<button class="aui-button aui-button-primary" value="subtask" id="dialog-show-button-5">SUB TASKS</button>
+		         	<button class="aui-button aui-button-primary" value="sub-task" id="dialog-show-button-5">SUB TASKS</button>
 		         </div>
 		          <div class="col-md-2"></div>
 	         </div>

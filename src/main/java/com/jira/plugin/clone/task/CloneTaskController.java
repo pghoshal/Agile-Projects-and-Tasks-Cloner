@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +39,11 @@ import com.atlassian.jira.rest.client.api.domain.input.FieldInput;
 import com.atlassian.jira.rest.client.api.domain.input.IssueInput;
 import com.atlassian.util.concurrent.Promise;
 import com.google.gson.Gson;
+import com.jira.plugin.clone.create.schema.request.Assignee;
+import com.jira.plugin.clone.create.schema.request.CreateIssue;
+import com.jira.plugin.clone.create.schema.request.Fields;
+import com.jira.plugin.clone.create.schema.request.Update;
+import com.jira.plugin.clone.create.schema.response.CreateIssueResponse;
 import com.jira.plugin.clone.issuesearch.schema.SearchIssue;
 import com.jira.plugin.clone.search.schema.Search;
 
@@ -127,6 +133,7 @@ public class CloneTaskController
 	@IgnoreJwt
 	@RequestMapping(value="/copyissues" , method=RequestMethod.POST)
 	public @ResponseBody String submitIssues(@RequestBody CopyIssueDTO copyIssueDTO ){
+		CreateIssueResponse response=null;
 		AtlassianHost host=new AtlassianHost();
 		host.setBaseUrl(copyIssueDTO.getBaseUrl());
 		List<SearchIssue> searchIssueList = new ArrayList<SearchIssue>();
@@ -145,42 +152,32 @@ public class CloneTaskController
 					&& issue.getKey()!=null 
 					&& issue.getKey().contains(copyIssueDTO.getProjectA())){
 				issueKeyList.add(issue.getKey());
-				log.info(issue.getKey());
+				//log.info(issue.getKey());
 			}
 		}
-		Map<String, FieldInput> map = new HashMap<String, FieldInput>();
+		//Map<String, FieldInput> map = new HashMap<String, FieldInput>();
 		for (String issueKey : issueKeyList) {
 			SearchIssue issueSearch = restTemplate.getForObject("https://annexchettri.atlassian.net/rest/api/latest/issue/"+issueKey, SearchIssue.class);
-			if(copyIssueDTO.getIssues()!=null && copyIssueDTO.getIssues().equals(issueSearch.getFields().getIssuetype().getName())){
-				searchIssueList.add(issueSearch);
-				issueSearch.getFields();
-				FieldInput input1 = new FieldInput(IssueFieldId.PROJECT_FIELD, issueSearch.getFields());
-				FieldInput input2 = new FieldInput(IssueFieldId.PROJECT_FIELD, issueSearch.getExpand());
-				FieldInput input3 = new FieldInput(IssueFieldId.PROJECT_FIELD, issueSearch.getId());
-				FieldInput input4 = new FieldInput(IssueFieldId.PROJECT_FIELD, issueSearch.getKey());
-				FieldInput input5 = new FieldInput(IssueFieldId.PROJECT_FIELD, issueSearch.getSelf());
-				map.put("fields", input1);
-				map.put("expands", input2);
-				map.put("id", input3);
-				map.put("key", input4);
-				map.put("self", input5);
-				IssueInput issue= new IssueInput(map);
-				
-				Promise<BasicIssue> createdIssue = restClient.getIssueClient().createIssue(issue);
-				try {
-					log.info(issueSearch.getId()+" :::: Issue Created"+createdIssue.get().getKey());
-				} catch (InterruptedException e) {
-					log.info(" Errror occurred : "+e);
-				} catch (ExecutionException e) {
-					log.info(" Errror occurred : "+e);
+			log.info("Issue Retrieve : "+issueSearch.getId());
+			log.info("Issue Retrieve Type: "+issueSearch.getFields().getIssuetype().getName());
+			for(String issueType : copyIssueDTO.getIssues()){
+				if(issueType !=null && issueType.equalsIgnoreCase(issueSearch.getFields().getIssuetype().getName())){
+					searchIssueList.add(issueSearch);
+					com.jira.plugin.clone.issuesearch.schema.Fields fields = issueSearch.getFields();
+					fields.getProject().setId(copyIssueDTO.getProjectB());
+					
+					CreateIssue request = new CreateIssue();
+					request.setFields(issueSearch.getFields());
+					Update update = new Update();
+					request.setUpdate(update );
+					ResponseEntity<CreateIssueResponse> responseEntity = restTemplate.postForEntity("https://annexchettri.atlassian.net/rest/api/2/issue", request, CreateIssueResponse.class);
+					response = responseEntity.getBody();
+					log.info(issueSearch.getId()+" :::: Issue Created"+response.getId());
 				}
 			}
 		}
 		
-		IssueInput issue= new IssueInput(map );
-		restClient.getIssueClient().createIssue(issue);
-		
-		return p1!=null && p2!=null && size>0 ?  "{"+"\"message\":\"success\""+"}" : "{"+"\"message\":\"error\""+"}";
+		return response!=null ?  "{"+"\"message\":\"success\""+"}" : "{"+"\"message\":\"error\""+"}";
 	}
 	
 	@IgnoreJwt

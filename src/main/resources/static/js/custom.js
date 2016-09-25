@@ -129,7 +129,6 @@ $("#load-all-button").on('click' ,function(){
 
 $("#sync-product-single-select-1").on("change", function (){
 	var dd1=$("#sync-product-single-select-1").val();
-	alert(dd1);
 	$.ajax({
 	    url: '/getcustomissue',
 	    dataType: 'json',
@@ -140,13 +139,12 @@ $("#sync-product-single-select-1").on("change", function (){
 	    success: function( data, textStatus, jQxhr ){
 	        var array=[];
 	        array = data;
-	        alert("Data : "+data);
+	        
 	        var options='';
 	        for (var i = 0; i < array.length; i++) {
 	        	options += '<option value="' + array[i] + '">' + array[i] + '</option>';
 	        }
 	        $("#multiselect").html(options);
-	        alert("sucess");
 	    },
 	    error: function( jqXhr, textStatus, errorThrown ){
 	        alert("Error "+errorThrown);
