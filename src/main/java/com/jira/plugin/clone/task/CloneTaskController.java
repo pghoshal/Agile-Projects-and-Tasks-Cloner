@@ -2,10 +2,8 @@ package com.jira.plugin.clone.task;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -29,20 +27,27 @@ import com.atlassian.connect.spring.IgnoreJwt;
 import com.atlassian.connect.spring.internal.jira.rest.JiraRestClientFactory;
 import com.atlassian.connect.spring.internal.jira.rest.JiraRestClientFactoryImpl;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
-import com.atlassian.jira.rest.client.api.domain.BasicIssue;
 import com.atlassian.jira.rest.client.api.domain.BasicProject;
 import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.atlassian.jira.rest.client.api.domain.IssueFieldId;
 import com.atlassian.jira.rest.client.api.domain.IssueType;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
-import com.atlassian.jira.rest.client.api.domain.input.FieldInput;
-import com.atlassian.jira.rest.client.api.domain.input.IssueInput;
 import com.atlassian.util.concurrent.Promise;
 import com.google.gson.Gson;
+import com.jira.plugin.clone.create.schema.request.Add;
 import com.jira.plugin.clone.create.schema.request.Assignee;
+import com.jira.plugin.clone.create.schema.request.Component;
 import com.jira.plugin.clone.create.schema.request.CreateIssue;
 import com.jira.plugin.clone.create.schema.request.Fields;
+import com.jira.plugin.clone.create.schema.request.FixVersion;
+import com.jira.plugin.clone.create.schema.request.Issuetype;
+import com.jira.plugin.clone.create.schema.request.Priority;
+import com.jira.plugin.clone.create.schema.request.Project;
+import com.jira.plugin.clone.create.schema.request.Reporter;
+import com.jira.plugin.clone.create.schema.request.Security;
+import com.jira.plugin.clone.create.schema.request.Timetracking;
 import com.jira.plugin.clone.create.schema.request.Update;
+import com.jira.plugin.clone.create.schema.request.Version;
+import com.jira.plugin.clone.create.schema.request.Worklog;
 import com.jira.plugin.clone.create.schema.response.CreateIssueResponse;
 import com.jira.plugin.clone.issuesearch.schema.SearchIssue;
 import com.jira.plugin.clone.search.schema.Search;
@@ -167,11 +172,14 @@ public class CloneTaskController
 					fields.getProject().setId(copyIssueDTO.getProjectB());
 					
 					CreateIssue request = new CreateIssue();
-					request.setFields(issueSearch.getFields());
+					processRequest(request, issueSearch);
 					Update update = new Update();
 					request.setUpdate(update );
-					ResponseEntity<CreateIssueResponse> responseEntity = restTemplate.postForEntity("https://annexchettri.atlassian.net/rest/api/2/issue", request, CreateIssueResponse.class);
-					response = responseEntity.getBody();
+					Gson grequest = new Gson();
+					log.info(grequest.toJson(request).toString());
+					response = restTemplate.postForObject("https://annexchettri.atlassian.net/rest/api/2/issue", request, CreateIssueResponse.class);
+					//ResponseEntity<CreateIssueResponse> responseEntity = restTemplate.postForEntity("https://annexchettri.atlassian.net/rest/api/2/issue", request, CreateIssueResponse.class);
+					//response = responseEntity.getBody();
 					log.info(issueSearch.getId()+" :::: Issue Created"+response.getId());
 				}
 			}
@@ -180,6 +188,83 @@ public class CloneTaskController
 		return response!=null ?  "{"+"\"message\":\"success\""+"}" : "{"+"\"message\":\"error\""+"}";
 	}
 	
+	private void processRequest(CreateIssue request, SearchIssue issueSearch) {
+		/*Update update = new Update();
+		
+		Add add= new Add();
+		add.setTimeSpent("60m");
+		add.setStarted("2016-09-03T12:39:10.923+0530");
+		Worklog worklog= new Worklog();
+		worklog.setAdd(add);
+		List<Worklog> worklogs = new ArrayList<Worklog>();
+		worklogs.add(worklog);
+		update.setWorklog(worklogs);*/
+		//update.addWorklog(worklog1);
+		
+		
+		Fields fields =new  Fields();
+		Assignee assignee =new Assignee();
+		assignee.setName("admin");
+		fields.setAssignee(assignee );
+		Component components1 = new Component();
+		components1.setId("10000");
+		List<Component> components = new ArrayList<Component>();
+		components.add(components1);
+		
+		fields.setComponents(components);
+		
+		fields.setDescription("Test data desc");
+		fields.setDuedate("2016-09-17");
+		fields.setEnvironment("environment");
+		
+		List<FixVersion> fixVersions = new ArrayList<FixVersion>();
+		FixVersion fixVersions1 = new FixVersion();
+		
+		fixVersions1.setId("10000");
+		fixVersions.add(fixVersions1);
+		fields.setFixVersions(fixVersions);
+		
+		Issuetype issuetype= new Issuetype();
+		issuetype.setId("10022");
+		fields.setIssuetype(issuetype);
+		
+		List<String> labels = new ArrayList<String>();
+		labels.add("bugfix");
+		labels.add("blitz_test");
+		fields.setLabels(labels );
+		Priority priority= new Priority();
+		priority.setId("20000");
+		fields.setPriority(priority);
+		
+		Project project= new Project();
+		project.setId("10000");
+		fields.setProject(project);
+		
+		Reporter reporter=new Reporter();
+		reporter.setName("Medium");
+		fields.setReporter(reporter);
+		
+		Security security=new Security();
+		security.setId("10000");
+		fields.setSecurity(security);
+		
+		fields.setSummary("New project creation");
+		
+		Timetracking timetracking =new Timetracking();
+		timetracking.setOriginalEstimate("10");
+		timetracking.setRemainingEstimate("5");
+		fields.setTimetracking(timetracking );
+		
+		List<Version> versions = new ArrayList<Version>();
+		Version versions1 = new Version();
+		versions1.setId("10000");
+		versions.add(versions1);
+		fields.setVersions(versions );
+		
+		//request.setUpdate(update);
+		request.setFields(fields);
+	}
+
 	@IgnoreJwt
 	@RequestMapping(value="/issuetype" , method=RequestMethod.GET)
 	 
