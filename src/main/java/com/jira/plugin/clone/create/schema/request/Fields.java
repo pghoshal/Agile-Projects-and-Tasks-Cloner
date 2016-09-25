@@ -39,7 +39,7 @@ public class Fields {
     private Security security;
     @SerializedName("versions")
     @Expose
-    private List<Version> versions = new ArrayList<Version>();
+    private List<Version> versions;
     @SerializedName("environment")
     @Expose
     private String environment;
@@ -57,7 +57,7 @@ public class Fields {
     private List<Component> components = new ArrayList<Component>();
     @SerializedName("customfield_30000")
     @Expose
-    private List<String> customfield30000 = new ArrayList<String>();
+    private List<String> customfield30000;
     @SerializedName("customfield_80000")
     @Expose
     private Customfield80000 customfield80000;
@@ -69,7 +69,7 @@ public class Fields {
     private String customfield40000;
     @SerializedName("customfield_70000")
     @Expose
-    private List<String> customfield70000 = new ArrayList<String>();
+    private List<String> customfield70000;
     @SerializedName("customfield_60000")
     @Expose
     private String customfield60000;

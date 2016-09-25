@@ -167,20 +167,24 @@ public class CloneTaskController
 			log.info("Issue Retrieve Type: "+issueSearch.getFields().getIssuetype().getName());
 			for(String issueType : copyIssueDTO.getIssues()){
 				if(issueType !=null && issueType.equalsIgnoreCase(issueSearch.getFields().getIssuetype().getName())){
+					log.info("Issue type :"+issueSearch.getFields().getIssuetype().getId());
 					searchIssueList.add(issueSearch);
 					com.jira.plugin.clone.issuesearch.schema.Fields fields = issueSearch.getFields();
 					fields.getProject().setId(copyIssueDTO.getProjectB());
 					
 					CreateIssue request = new CreateIssue();
 					processRequest(request, issueSearch);
-					Update update = new Update();
-					request.setUpdate(update );
 					Gson grequest = new Gson();
 					log.info(grequest.toJson(request).toString());
-					response = restTemplate.postForObject("https://annexchettri.atlassian.net/rest/api/2/issue", request, CreateIssueResponse.class);
-					//ResponseEntity<CreateIssueResponse> responseEntity = restTemplate.postForEntity("https://annexchettri.atlassian.net/rest/api/2/issue", request, CreateIssueResponse.class);
+					try {
+					String response1 = restTemplate.postForObject("https://annexchettri.atlassian.net/rest/api/latest/issue", request, String.class);
+					}catch(Exception e){
+						e.printStackTrace();
+						log.info(e.getMessage()+" and "+e.getCause());
+					}
+					//ResponseEntity<String> responseEntity = restTemplate.postForEntity("https://annexchettri.atlassian.net/rest/api/2/issue", request, String.class);
 					//response = responseEntity.getBody();
-					log.info(issueSearch.getId()+" :::: Issue Created"+response.getId());
+					//log.info(issueSearch.getId()+" :::: Issue Created"+response1);
 				}
 			}
 		}
@@ -214,8 +218,8 @@ public class CloneTaskController
 		fields.setComponents(components);
 		
 		fields.setDescription("Test data desc");
-		fields.setDuedate("2016-09-17");
-		fields.setEnvironment("environment");
+		/*fields.setDuedate("2016-09-17");
+		fields.setEnvironment("environment");*/
 		
 		List<FixVersion> fixVersions = new ArrayList<FixVersion>();
 		FixVersion fixVersions1 = new FixVersion();
@@ -225,7 +229,7 @@ public class CloneTaskController
 		fields.setFixVersions(fixVersions);
 		
 		Issuetype issuetype= new Issuetype();
-		issuetype.setId("10022");
+		issuetype.setId("10000");
 		fields.setIssuetype(issuetype);
 		
 		List<String> labels = new ArrayList<String>();
@@ -233,7 +237,7 @@ public class CloneTaskController
 		labels.add("blitz_test");
 		fields.setLabels(labels );
 		Priority priority= new Priority();
-		priority.setId("20000");
+		priority.setId("1");// Ranges from 1 to 5
 		fields.setPriority(priority);
 		
 		Project project= new Project();
@@ -241,25 +245,25 @@ public class CloneTaskController
 		fields.setProject(project);
 		
 		Reporter reporter=new Reporter();
-		reporter.setName("Medium");
+		reporter.setName("admin");
 		fields.setReporter(reporter);
 		
-		Security security=new Security();
+		/*Security security=new Security();
 		security.setId("10000");
-		fields.setSecurity(security);
+		fields.setSecurity(security);*/
 		
 		fields.setSummary("New project creation");
 		
-		Timetracking timetracking =new Timetracking();
+		/*Timetracking timetracking =new Timetracking();
 		timetracking.setOriginalEstimate("10");
 		timetracking.setRemainingEstimate("5");
-		fields.setTimetracking(timetracking );
+		fields.setTimetracking(timetracking );*/
 		
-		List<Version> versions = new ArrayList<Version>();
+		/*List<Version> versions = new ArrayList<Version>();
 		Version versions1 = new Version();
 		versions1.setId("10000");
 		versions.add(versions1);
-		fields.setVersions(versions );
+		fields.setVersions(versions );*/
 		
 		//request.setUpdate(update);
 		request.setFields(fields);
