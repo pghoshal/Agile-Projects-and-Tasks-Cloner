@@ -10,9 +10,15 @@ import java.util.concurrent.ExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,7 +39,6 @@ import com.atlassian.jira.rest.client.api.domain.IssueType;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
 import com.atlassian.util.concurrent.Promise;
 import com.google.gson.Gson;
-import com.jira.plugin.clone.create.schema.request.Add;
 import com.jira.plugin.clone.create.schema.request.Assignee;
 import com.jira.plugin.clone.create.schema.request.Component;
 import com.jira.plugin.clone.create.schema.request.CreateIssue;
@@ -43,11 +48,6 @@ import com.jira.plugin.clone.create.schema.request.Issuetype;
 import com.jira.plugin.clone.create.schema.request.Priority;
 import com.jira.plugin.clone.create.schema.request.Project;
 import com.jira.plugin.clone.create.schema.request.Reporter;
-import com.jira.plugin.clone.create.schema.request.Security;
-import com.jira.plugin.clone.create.schema.request.Timetracking;
-import com.jira.plugin.clone.create.schema.request.Update;
-import com.jira.plugin.clone.create.schema.request.Version;
-import com.jira.plugin.clone.create.schema.request.Worklog;
 import com.jira.plugin.clone.create.schema.response.CreateIssueResponse;
 import com.jira.plugin.clone.issuesearch.schema.SearchIssue;
 import com.jira.plugin.clone.search.schema.Search;
@@ -64,6 +64,7 @@ public class CloneTaskController
 	private JiraRestClientFactory factory ;
 	
 	JiraRestClient restClient;
+	private MultiValueMap<String, Object> headers;
 	
 	@RequestMapping(value = "/sample", method = RequestMethod.GET)
 	public ModelAndView sample(@RequestParam String username) {
@@ -176,15 +177,14 @@ public class CloneTaskController
 					processRequest(request, issueSearch);
 					Gson grequest = new Gson();
 					log.info(grequest.toJson(request).toString());
-					try {
-					String response1 = restTemplate.postForObject("https://annexchettri.atlassian.net/rest/api/latest/issue", request, String.class);
-					}catch(Exception e){
-						e.printStackTrace();
-						log.info(e.getMessage()+" and "+e.getCause());
-					}
-					//ResponseEntity<String> responseEntity = restTemplate.postForEntity("https://annexchettri.atlassian.net/rest/api/2/issue", request, String.class);
-					//response = responseEntity.getBody();
-					//log.info(issueSearch.getId()+" :::: Issue Created"+response1);
+					headers = new LinkedMultiValueMap<String, Object>();
+				        headers.add("Accept", "application/json");
+				        headers.add("Content-Type", "application/json");
+				        HttpEntity httprequest = new
+				        		HttpEntity(grequest.toJson(request).toString(), headers);
+					ResponseEntity<CreateIssueResponse> responseEntity = restTemplate.postForEntity("https://annexchettri.atlassian.net/rest/api/2/issue", httprequest, CreateIssueResponse.class);
+					response = responseEntity.getBody();
+					log.info(issueSearch.getId()+" :::: Issue Created"+response);
 				}
 			}
 		}
