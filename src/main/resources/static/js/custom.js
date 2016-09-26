@@ -1,4 +1,6 @@
 $(document).ready(function() {
+	document.getElementById('custom').style.display='none';
+	document.getElementById('message').style.display='none';
 	$("#progress-bar").hide();
 $("button#jQueryColorChange").on('click',function(){
     $(this).toggleClass('selected');
@@ -74,10 +76,12 @@ $("#dialog-show-button-5").on('click',function(){
 		}
 });
 $("#load-all-button").on('click' ,function(){
+	var customIssues=[];
 	var  dd1 = $("#sync-product-single-select-1").val();
 	var  dd2 = $("#sync-product-single-select-2").val();
+	customIssues = $("#multiselect").val();
 	if(dd1==''){
-		alert('Please select From Project to copy')
+		alert('Please select From Project to copy');
 	}else if(dd2==''){
 		alert('Please select To Project');
 	}else if(dd1==dd2){
@@ -96,7 +100,7 @@ $("#load-all-button").on('click' ,function(){
 		    dataType: 'json',
 		    type: 'post',
 		    contentType: 'application/json',
-		    data: JSON.stringify( { "projectA":dd1 , "projectB": dd2, "baseUrl" :baseUrl, "issues" :[task, story, request, bug, subtask] } ),
+		    data: JSON.stringify( { "projectA":dd1 , "projectB": dd2, "baseUrl" :baseUrl, "issues" :[task, story, request, bug, subtask] , "customissue":customIssues} ),
 		    processData: false,
 		    success: function( data, textStatus, jQxhr ){
 		        AJS.progressBars.update("#progress-bar", 1);
@@ -129,6 +133,7 @@ $("#load-all-button").on('click' ,function(){
 
 $("#sync-product-single-select-1").on("change", function (){
 	var dd1=$("#sync-product-single-select-1").val();
+	$("#progress-bar").show();
 	$.ajax({
 	    url: '/getcustomissue',
 	    dataType: 'json',
@@ -145,9 +150,18 @@ $("#sync-product-single-select-1").on("change", function (){
 	        	options += '<option value="' + array[i] + '">' + array[i] + '</option>';
 	        }
 	        $("#multiselect").html(options);
+	        if(array.length>0){
+	        	document.getElementById('message').style.display='none';
+	        	document.getElementById('custom').style.display='';
+	        } else {
+	        	document.getElementById('custom').style.display='none';
+	        	document.getElementById('message').style.display='';
+	        }
+	        $("#progress-bar").hide();
 	    },
 	    error: function( jqXhr, textStatus, errorThrown ){
 	        alert("Error "+errorThrown);
+	        $("#progress-bar").hide();
 	    }
 	 });
 });

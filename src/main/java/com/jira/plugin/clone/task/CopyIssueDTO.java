@@ -22,6 +22,10 @@ public class CopyIssueDTO {
 	@SerializedName("issues")
 	@Expose
 	private List<String> issues = new ArrayList<String>();
+	
+	@SerializedName("customIssues")
+	@Expose
+	private List<String> customIssues = new ArrayList<String>();
 
 	public String getBaseUrl()
 	{
@@ -82,6 +86,14 @@ public class CopyIssueDTO {
 	 */
 	public void setIssues(List<String> issues) {
 		this.issues = issues;
+	}
+
+	public List<String> getCustomIssues() {
+		return customIssues;
+	}
+
+	public void setCustomIssues(List<String> customIssues) {
+		this.customIssues = customIssues;
 	}
 
 }

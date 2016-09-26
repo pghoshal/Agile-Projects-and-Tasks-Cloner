@@ -1,145 +1,177 @@
 <html>
-    <head>
+<head>
 <script src="$atlassian-connect-all-js-url" type="text/javascript"></script>
 <script src="$atlassian-connect-license" type="text/javascript"></script>
 <script src="$atlassian-connect-locale" type="text/javascript"></script>
 <script src="$atlassian-connect-timezone" type="text/javascript"></script>
 <script src="/js/jquery.min.js"></script>
 <script src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui.js"></script>
-<script src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui-experimental.js"></script>
-<script src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui-datepicker.js"></script>
-<link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.10.1/css/aui.css"/>
-<link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.10.1/css/aui-experimental.css"/>
-<link rel="stylesheet" type="text/css" href="/css/custom.css"/>
+<script
+	src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui-experimental.js"></script>
+<script
+	src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui-datepicker.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="//aui-cdn.atlassian.com/aui-adg/5.10.1/css/aui.css" />
+<link rel="stylesheet" type="text/css"
+	href="//aui-cdn.atlassian.com/aui-adg/5.10.1/css/aui-experimental.css" />
+<link rel="stylesheet" type="text/css" href="/css/custom.css" />
 <script src="/js/sinon.js"></script>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="all">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	media="all">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="/js/custom.js"></script>
 
- </head>
-    <body>
-    <!-- / External dependencies -->
-    <div id="aui-message-bar"></div>
-      <div class="row" style="margin-top: 30px;"></div>
-      <div class="row">
-      <div id="progress-bar" class="aui-progress-indicator">
-        <span class="aui-progress-indicator-value"></span>
-       
-      </div>
-       <input type="hidden" id="baseUrl" value="${baseUrl}" />
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
-          <h3>Welcome to agile projects cloner</h3>
-          <p style="margin-top: 10px;">Agile Project Cloner is here to help you clone tasks from one single project and copy them to another project in your JIRA Cloud Instance. Please note that the tasks you will copy and move to another project will still remain in your original project therefore you can easily progress any work on them and on the project. </p>
-	        <div class="error">Please Select</div>
-	        <div class="row">
-		        <div class="col-md-1"></div>
-		        <div class="col-md-10">
-		          <p style="margin-top: 5px;">STEP 1 SELECT THE PROJECT FROM WHICH YOU WANT TO COPY TASKS</p>
-		           <form class="aui">
-    				 <p>
-        				<aui-select id="sync-product-single-select-1" name="product" placeholder="From project">
-        				#foreach($project in $projectList)
-        					<aui-option value="$project.key">$project.name</aui-option>
-        				#end
-        				</aui-select>
-    				 </p>
-				    </form>
-		        </div>
-		        <div class="col-md-1"></div>
-	        </div>
-	        <div class="row">
-		        <div class="col-md-1"></div>
-		        <div class="col-md-10">
-		          <p style="margin-top: 5px;">STEP 2 SELECT THE PROJECT TO WHICH YOU WANT TO PASTE TASKS</p>
-		           <form class="aui">
-    				 <p>
-        				<aui-select id="sync-product-single-select-2" name="product" placeholder="To project">
-        				#foreach($project in $projectList)
-        					<aui-option value="$project.key">$project.name</aui-option>
-        				#end
-        				</aui-select>
-    				 </p>
-				    </form>
-		         </div>
-		         <div class="col-md-1"></div>
-	         </div>
-	         <div class="row">
-		         <div class="col-md-1"></div>
-		         <div class="col-md-10">
-		          <p style="margin-top: 5px;"> STEP 3 SELECT ISSUE TYPES YOU WANT TO COPY </p>
-		         </div>
-		         <div class="col-md-1"></div>
-	         </div>
-	         
-	         <div class="row" style="margin-top: 20px;">
-	         	 <div class="col-md-2"></div>
-		         <div class="col-md-8" style="margin-left: 65px;">
-		         	<button class="aui-button aui-button-primary" value="task" id="dialog-show-button-1">TASKS</button>
-		         	<button class="aui-button aui-button-primary" value="story" id="dialog-show-button-2">USER STORIES</button>
-		         	<button class="aui-button aui-button-primary" value="request" id="dialog-show-button-3">FEATURE REQUESTS</button>
-		         	<button class="aui-button aui-button-primary" value="bug" id="dialog-show-button-4">BUGS</button>
-		         	<button class="aui-button aui-button-primary" value="sub-task" id="dialog-show-button-5">SUB TASKS</button>
-		         </div>
-		          <div class="col-md-2"></div>
-	         </div>
-	         	<div class="row" style="margin-top: 20px;">
-	         		<div class="col-md-3"></div>
-	         		<div class="col-md-6">
-	         		<table cellspacing="5">
-	         		<tr>
-	         		<td valign="middle" style="padding-right:30px">
-	         		<p style="font-size:13px">I WANT TO COPY CUSTOM ISSUE TYPES </p>  
-	         		</td>
-	         		<td valign="middle">
-	         		<!--<button class="aui-button aui-button-primary" id="load-custom-button" style="background:#E78270;">LOAD CUSTOM ISSUE</button>-->
-	         		<div class="field-group">
-       					 <select class="multi-select" size="5" multiple="multiple" id="multiselect" name="multiselect">
-				         </select>
-    				</div>
-	         		</td>
-	         		</tr>
-	         		<tr style="margin-top: 20px;">
-	         		<td valign="middle">
-	         		<p style="font-size:13px">I WANT TO COPY ALL OF ISSUES</p>
-	         		</td>
-	         		<td valign="middle">
-	         		 <button class="aui-button aui-button-primary" id="load-all-button" style="background:#E78270;">LOAD ALL ISSUE</button>
-	         		</td>
-	         		</tr>
-	         		</table>
-	         		</div>
-	         	<div class="col-md-3"></div>
-	         	</div>
-        	</div>
-        </div>
-        <div class="col-md-1"></div>
-      </div>
-    <script id="connect-loader" data-options="sizeToParent:true;">
-         (function() {
-             var getUrlParam = function (param) {
-                 var codedParam = (new RegExp(param + '=([^&]*)')).exec(window.location.search)[1];
-                 return decodeURIComponent(codedParam);
-             };
+</head>
+<body>
+	<!-- / External dependencies -->
+	<div id="aui-message-bar"></div>
+	<div class="row" style="margin-top: 30px;"></div>
+	<div class="row">
+		<div id="progress-bar" class="aui-progress-indicator">
+			<span class="aui-progress-indicator-value"></span>
 
-             var baseUrl = getUrlParam('xdm_e') + getUrlParam('cp');
-             var options = document.getElementById('connect-loader').getAttribute('data-options');
+		</div>
+		<input type="hidden" id="baseUrl" value="${baseUrl}" />
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			<h3>Welcome to agile projects cloner</h3>
+			<p style="margin-top: 10px;">Agile Project Cloner is here to help
+				you clone tasks from one single project and copy them to another
+				project in your JIRA Cloud Instance. Please note that the tasks you
+				will copy and move to another project will still remain in your
+				original project therefore you can easily progress any work on them
+				and on the project.</p>
+			<div class="error">Please Select</div>
+			<div class="row">
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<p style="margin-top: 5px;">STEP 1 SELECT THE PROJECT FROM
+						WHICH YOU WANT TO COPY TASKS</p>
+					<form class="aui">
+						<p>
+							<aui-select id="sync-product-single-select-1" name="product"
+								placeholder="From project"> #foreach($project in
+							$projectList) <aui-option value="$project.key">$project.name</aui-option>
+							#end </aui-select>
+						</p>
+					</form>
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+			<div class="row">
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<p style="margin-top: 5px;">STEP 2 SELECT THE PROJECT TO WHICH
+						YOU WANT TO PASTE TASKS</p>
+					<form class="aui">
+						<p>
+							<aui-select id="sync-product-single-select-2" name="product"
+								placeholder="To project"> #foreach($project in
+							$projectList) <aui-option value="$project.key">$project.name</aui-option>
+							#end </aui-select>
+						</p>
+					</form>
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+			<div class="row">
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<p style="margin-top: 5px;">STEP 3 SELECT ISSUE TYPES YOU WANT
+						TO COPY</p>
+				</div>
+				<div class="col-md-1"></div>
+			</div>
 
-             var script = document.createElement("script");
-             script.src = baseUrl + '/atlassian-connect/all.js';
+			<div class="row" style="margin-top: 20px;">
+				<div class="col-md-2"></div>
+				<div class="col-md-8" style="margin-left: 65px;">
+					<button class="aui-button aui-button-primary" value="task"
+						id="dialog-show-button-1">TASKS</button>
+					<button class="aui-button aui-button-primary" value="story"
+						id="dialog-show-button-2">USER STORIES</button>
+					<button class="aui-button aui-button-primary" value="request"
+						id="dialog-show-button-3">FEATURE REQUESTS</button>
+					<button class="aui-button aui-button-primary" value="bug"
+						id="dialog-show-button-4">BUGS</button>
+					<button class="aui-button aui-button-primary" value="sub-task"
+						id="dialog-show-button-5">SUB TASKS</button>
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+			<div class="row" style="margin-top: 20px;">
+				<div class="col-md-3"></div>
+				<div class="col-md-6">
+					<table cellspacing="5" id="custom">
+						<tr>
+							<div id="customfield">
+								<td valign="middle" style="padding-right: 30px">
+									<p style="font-size: 13px">I WANT TO COPY CUSTOM ISSUE
+										TYPES</p>
+								</td>
+								<td valign="middle">
+									<div class="field-group">
+										<select class="multi-select" size="5" multiple="multiple"
+											id="multiselect" name="multiselect">
+										</select>
+									</div>
+								</td>
+							</div>
+						</tr>
+					</table>
+					<table cellspacing="5" id="message">
+						<tr id="message">
+							<td>
+								<p style="font-size: 20px">No Custom issue for Selected
+									Project</p>
+							</td>
+						</tr>
+					</table>
+					<table cellspacing="5">
+						<tr style="margin-top: 20px;">
+							<td valign="middle" style="padding-right: 30px">
+								<p style="font-size: 13px">I WANT TO COPY ALL OF ISSUES</p>
+							</td>
+							<td valign="middle">
+								<button class="aui-button aui-button-primary"
+									id="load-all-button" style="background: #E78270;">COPY ALL ISSUE</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-1"></div>
+	</div>
+	<script id="connect-loader" data-options="sizeToParent:true;">
+		(function() {
+			var getUrlParam = function(param) {
+				var codedParam = (new RegExp(param + '=([^&]*)'))
+						.exec(window.location.search)[1];
+				return decodeURIComponent(codedParam);
+			};
 
-             if(options) {
-                 script.setAttribute('data-options', options);
-             }
+			var baseUrl = getUrlParam('xdm_e') + getUrlParam('cp');
+			var options = document.getElementById('connect-loader')
+					.getAttribute('data-options');
 
-             document.getElementsByTagName("head")[0].appendChild(script);
-         })();
-         
-     </script>
-     <script language="JavaScript" type="text/javascript">   
-       
-        
-    </script>
-    </body>
+			var script = document.createElement("script");
+			script.src = baseUrl + '/atlassian-connect/all.js';
+
+			if (options) {
+				script.setAttribute('data-options', options);
+			}
+
+			document.getElementsByTagName("head")[0].appendChild(script);
+		})();
+	</script>
+	<script language="JavaScript" type="text/javascript">
+		
+	</script>
+</body>
 </html>

@@ -11,9 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -99,28 +96,6 @@ public class CloneTaskController
 	    List<Issue> issueTypeList = null;
 	    Iterator<BasicProject> iterator = restClient.getProjectClient().getAllProjects().claim().iterator();
         
-       // Promise<SearchResult> issues = restClient.getSearchClient().searchJql("project=TD", 50000, 0, null);
-//        Set<String> commonIssueTypes=new HashSet<String>();
-//        Set<String> customIssueTypes=new HashSet<String>();
-//        try {
-//			SearchResult searchResult = issues.get();
-//			issueTypeList = (List<Issue>) searchResult.getIssues();
-//			for (Issue issue : issueTypeList)
-//			{
-//				if(issue.getIssueType().getName().equalsIgnoreCase("Story")||issue.getIssueType().getName().equalsIgnoreCase("Bug")||issue.getIssueType().getName().equalsIgnoreCase("Sub-task"))
-//					{
-//					commonIssueTypes.add(issue.getIssueType().getName());
-//					
-//					}else{
-//						customIssueTypes.add(issue.getIssueType().getName());
-//					}
-//					log.info(issue.getIssueType().getName());
-//			}
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		} catch (ExecutionException e) {
-//			e.printStackTrace();
-//		}
         projectList = new ArrayList<BasicProject>();
         //IssueTypeSchemeManager
         for(Iterator<BasicProject> i = iterator; i.hasNext(); ) {
@@ -136,137 +111,197 @@ public class CloneTaskController
 	   // model.addObject("issueTypeList",issueTypeList);
 	    return model;
 	}
+	
+	
 	@IgnoreJwt
 	@RequestMapping(value="/copyissues" , method=RequestMethod.POST)
 	public @ResponseBody String submitIssues(@RequestBody CopyIssueDTO copyIssueDTO ){
-		CreateIssueResponse response=null;
+		CreateIssueResponse issueCreateresponse=null;
+		CreateIssueResponse customIssueCreateresponse=null;
 		AtlassianHost host=new AtlassianHost();
 		host.setBaseUrl(copyIssueDTO.getBaseUrl());
 		List<SearchIssue> searchIssueList = new ArrayList<SearchIssue>();
-		restClient = factory.createJiraRestClient(host, restTemplate);
 		List<String> issueKeyList = new ArrayList<String>();
+		log.info("Base Url : "+copyIssueDTO.getBaseUrl());
+		Search search = restTemplate.getForObject(copyIssueDTO.getBaseUrl()+"/rest/api/latest/search/", Search.class);
 		
-		Search search = restTemplate.getForObject("https://annexchettri.atlassian.net/rest/api/latest/search/", Search.class);
-		
-		String p1 = copyIssueDTO.getProjectA();
-		String p2 = copyIssueDTO.getProjectB();
-		int size = copyIssueDTO.getIssues().size();
-		log.info(" P1:"+p1 + " P2:"+p2+" size : "+size);
-		log.info(copyIssueDTO.getBaseUrl());
+		String projectFrom = copyIssueDTO.getProjectA();
+		Long projectId = (Long)restClient.getProjectClient().getProject(copyIssueDTO.getProjectB()).claim().getId();
+		log.info("Destination project id: "+projectId);
 		for (com.jira.plugin.clone.search.schema.Issue issue : search.getIssues()) {
 			if(issue != null 
 					&& issue.getKey()!=null 
-					&& issue.getKey().contains(copyIssueDTO.getProjectA())){
+					&& issue.getKey().contains(projectFrom)){
 				issueKeyList.add(issue.getKey());
-				//log.info(issue.getKey());
 			}
 		}
-		//Map<String, FieldInput> map = new HashMap<String, FieldInput>();
 		for (String issueKey : issueKeyList) {
-			SearchIssue issueSearch = restTemplate.getForObject("https://annexchettri.atlassian.net/rest/api/latest/issue/"+issueKey, SearchIssue.class);
+			SearchIssue issueSearch = restTemplate.getForObject(copyIssueDTO.getBaseUrl()+"/rest/api/latest/issue/"+issueKey, SearchIssue.class);
 			log.info("Issue Retrieve : "+issueSearch.getId());
 			log.info("Issue Retrieve Type: "+issueSearch.getFields().getIssuetype().getName());
-			for(String issueType : copyIssueDTO.getIssues()){
-				if(issueType !=null && issueType.equalsIgnoreCase(issueSearch.getFields().getIssuetype().getName())){
-					log.info("Issue type :"+issueSearch.getFields().getIssuetype().getId());
-					searchIssueList.add(issueSearch);
-					com.jira.plugin.clone.issuesearch.schema.Fields fields = issueSearch.getFields();
-					fields.getProject().setId(copyIssueDTO.getProjectB());
-					
-					CreateIssue request = new CreateIssue();
-					processRequest(request, issueSearch);
-					Gson grequest = new Gson();
-					log.info(grequest.toJson(request).toString());
-					headers = new LinkedMultiValueMap<String, Object>();
-				        headers.add("Accept", "application/json");
-				        headers.add("Content-Type", "application/json");
-				        HttpEntity httprequest = new
-				        		HttpEntity(grequest.toJson(request).toString(), headers);
-					ResponseEntity<CreateIssueResponse> responseEntity = restTemplate.postForEntity("https://annexchettri.atlassian.net/rest/api/2/issue", httprequest, CreateIssueResponse.class);
-					response = responseEntity.getBody();
-					log.info(issueSearch.getId()+" :::: Issue Created"+response);
-				}
-			}
+			issueCreateresponse = processAndCreateIssues(copyIssueDTO, issueCreateresponse, searchIssueList, projectId, issueSearch);
+			customIssueCreateresponse = processAndCreateCustomIssues(copyIssueDTO, customIssueCreateresponse, searchIssueList, projectId, issueSearch);
 		}
 		
-		return response!=null ?  "{"+"\"message\":\"success\""+"}" : "{"+"\"message\":\"error\""+"}";
+		 ModelAndView model = new ModelAndView();
+		
+		return issueCreateresponse!=null || customIssueCreateresponse!=null ?  "{"+"\"message\":\"success\""+"}" : "{"+"\"message\":\"error\""+"}";
+	}
+
+	private CreateIssueResponse processAndCreateCustomIssues(CopyIssueDTO copyIssueDTO, CreateIssueResponse response,
+			List<SearchIssue> searchIssueList, Long projectId, SearchIssue issueSearch) {
+		for(String issueType : copyIssueDTO.getCustomIssues()){
+			log.info("Issue Type : "+issueType);
+			response = createIssueToProject(copyIssueDTO, response, searchIssueList, projectId, issueSearch, issueType);
+		}
+		return response;
+	}
+
+	private CreateIssueResponse processAndCreateIssues(CopyIssueDTO copyIssueDTO, CreateIssueResponse response,
+			List<SearchIssue> searchIssueList, Long projectId, SearchIssue issueSearch) {
+		for(String issueType : copyIssueDTO.getIssues()){
+			log.info("Issue Type : "+issueType);
+			response = createIssueToProject(copyIssueDTO, response, searchIssueList, projectId, issueSearch, issueType);
+		}
+		return response;
+	}
+
+	private CreateIssueResponse createIssueToProject(CopyIssueDTO copyIssueDTO, CreateIssueResponse response,
+			List<SearchIssue> searchIssueList, Long projectId, SearchIssue issueSearch, String issueType) {
+		ResponseEntity<CreateIssueResponse> responseEntity;
+		if(issueType !=null && issueType.equalsIgnoreCase(issueSearch.getFields().getIssuetype().getName())){
+			log.info("Issue type :"+issueSearch.getFields().getIssuetype().getId());
+			searchIssueList.add(issueSearch);
+			
+			CreateIssue request = new CreateIssue();
+			processRequest(request, issueSearch);
+			//Setting Project ID
+			populateProject(projectId, request);
+			// Parsing json and add header
+			Gson grequest = new Gson();
+			log.info(grequest.toJson(request).toString());
+			headers = new LinkedMultiValueMap<String, Object>();
+		        headers.add("Accept", "application/json");
+		        headers.add("Content-Type", "application/json");
+		        HttpEntity httprequest = new HttpEntity(grequest.toJson(request).toString(), headers);
+		        try{
+		        	 responseEntity = restTemplate.postForEntity(copyIssueDTO.getBaseUrl()+"/rest/api/latest/issue", httprequest, CreateIssueResponse.class);
+		        	 response = responseEntity.getBody();
+		        }catch(Exception e){
+		        	log.info("Issue Not Created");
+		        	e.printStackTrace();
+		        }
+			log.info(issueSearch.getId()+" :::: Issue Created  :"+response);
+		}
+		return response;
+	}
+
+	private void populateProject(Long projectId, CreateIssue request) {
+		Project project = new Project();
+		project.setId(projectId.toString());
+		request.getFields().setProject(project);
 	}
 	
 	private void processRequest(CreateIssue request, SearchIssue issueSearch) {
-		/*Update update = new Update();
 		
-		Add add= new Add();
-		add.setTimeSpent("60m");
-		add.setStarted("2016-09-03T12:39:10.923+0530");
-		Worklog worklog= new Worklog();
-		worklog.setAdd(add);
-		List<Worklog> worklogs = new ArrayList<Worklog>();
-		worklogs.add(worklog);
-		update.setWorklog(worklogs);*/
-		//update.addWorklog(worklog1);
-		
+		Fields fields = populateFields(issueSearch);
+		request.setFields(fields);
+	}
+
+	private Fields populateFields(SearchIssue issueSearch) {
 		
 		Fields fields =new  Fields();
-		Assignee assignee =new Assignee();
-		assignee.setName("admin");
-		fields.setAssignee(assignee );
-		Component components1 = new Component();
-		components1.setId("10000");
-		List<Component> components = new ArrayList<Component>();
-		components.add(components1);
-		
+		populateAssignee(issueSearch, fields);
+		List<Component> components = populateComponent(issueSearch);
 		fields.setComponents(components);
+		populateDescription(issueSearch, fields);
+		//populateFixVersions(issueSearch, fields);
+		populateIssueType(issueSearch, fields);
+		populateLabels(issueSearch, fields);
+		populatePriority(issueSearch, fields);
+		populateProjectReporter(issueSearch, fields);
 		
-		fields.setDescription("Test data desc");
-		/*fields.setDuedate("2016-09-17");
-		fields.setEnvironment("environment");*/
-		
-		List<FixVersion> fixVersions = new ArrayList<FixVersion>();
-		FixVersion fixVersions1 = new FixVersion();
-		
-		fixVersions1.setId("10000");
-		fixVersions.add(fixVersions1);
-		fields.setFixVersions(fixVersions);
-		
+		fields.setSummary(issueSearch.getFields().getSummary());
+		return fields;
+	}
+
+	private List<Component> populateComponent(SearchIssue issueSearch) {
+		List<Object> componentsSearch = issueSearch.getFields().getComponents();
+		List<Component> components = new ArrayList<Component>();
+		Component component = null;
+		for (Object comp : componentsSearch) {
+			if(comp instanceof String){
+				component = new Component();
+				component.setId((String)comp);
+				components.add(component);
+			}
+		}
+		return components;
+	}
+
+	private void populateDescription(SearchIssue issueSearch, Fields fields) {
+		Object description = issueSearch.getFields().getDescription();
+		if(description instanceof String){
+			String desc = (String) description;
+			fields.setDescription(desc);
+		}
+	}
+
+	private void populateAssignee(SearchIssue issueSearch, Fields fields) {
+		com.jira.plugin.clone.issuesearch.schema.Assignee assigneeSearch = issueSearch.getFields().getAssignee();
+		Assignee assignee =new Assignee();
+		String name="Unassigned";	
+		if(assigneeSearch !=null && assigneeSearch.getName()!=null){
+			name = assigneeSearch.getName();
+			assignee.setName(name);
+		}
+		fields.setAssignee(assignee );
+	}
+
+	private void populateIssueType(SearchIssue issueSearch, Fields fields) {
+		com.jira.plugin.clone.issuesearch.schema.Issuetype issuetypeSearch = issueSearch.getFields().getIssuetype();
 		Issuetype issuetype= new Issuetype();
-		issuetype.setId("10000");
+		issuetype.setId(issuetypeSearch.getId());
 		fields.setIssuetype(issuetype);
-		
-		List<String> labels = new ArrayList<String>();
-		labels.add("bugfix");
-		labels.add("blitz_test");
-		fields.setLabels(labels );
-		Priority priority= new Priority();
-		priority.setId("1");// Ranges from 1 to 5
-		fields.setPriority(priority);
-		
-		Project project= new Project();
-		project.setId("10000");
-		fields.setProject(project);
-		
+	}
+
+	private void populateProjectReporter(SearchIssue issueSearch, Fields fields) {
+		final String reporterName = issueSearch.getFields().getReporter().getName();
 		Reporter reporter=new Reporter();
-		reporter.setName("admin");
+		reporter.setName(reporterName);
 		fields.setReporter(reporter);
-		
-		/*Security security=new Security();
-		security.setId("10000");
-		fields.setSecurity(security);*/
-		
-		fields.setSummary("New project creation");
-		
-		/*Timetracking timetracking =new Timetracking();
-		timetracking.setOriginalEstimate("10");
-		timetracking.setRemainingEstimate("5");
-		fields.setTimetracking(timetracking );*/
-		
-		/*List<Version> versions = new ArrayList<Version>();
-		Version versions1 = new Version();
-		versions1.setId("10000");
-		versions.add(versions1);
-		fields.setVersions(versions );*/
-		
-		//request.setUpdate(update);
-		request.setFields(fields);
+	}
+
+	private void populatePriority(SearchIssue issueSearch, Fields fields) {
+		com.jira.plugin.clone.issuesearch.schema.Priority proioritySearch = issueSearch.getFields().getPriority();
+		Priority priority= new Priority();
+		priority.setId(proioritySearch.getId());// Ranges from 1 to 5
+		fields.setPriority(priority);
+	}
+
+	private void populateLabels(SearchIssue issueSearch, Fields fields) {
+		final List<String> labelSearch = issueSearch.getFields().getLabels();
+		final List<String> labels = new ArrayList<String>();
+		for (String label : labelSearch) {
+			labels.add(label);
+		}
+		fields.setLabels(labels );
+	}
+
+	//Not Required
+	private void populateFixVersions(SearchIssue issueSearch, Fields fields) {
+		List<FixVersion> fixVersions = new ArrayList<FixVersion>();
+		FixVersion fixVersionCreate;
+		List<com.jira.plugin.clone.issuesearch.schema.FixVersion> fixVersionsSearch 
+		= issueSearch.getFields().getFixVersions();
+		for (com.jira.plugin.clone.issuesearch.schema.FixVersion fixVersion : fixVersionsSearch) {
+			if(fixVersion !=null){
+				fixVersionCreate = new FixVersion();
+				fixVersionCreate.setId(fixVersion.getId());
+				fixVersions.add(fixVersionCreate);
+			}
+		}
+		fields.setFixVersions(fixVersions);
 	}
 
 	@IgnoreJwt

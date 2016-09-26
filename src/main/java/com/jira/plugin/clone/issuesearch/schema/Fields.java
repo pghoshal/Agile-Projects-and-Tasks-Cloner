@@ -66,7 +66,7 @@ public class Fields {
     private String customfield10026;
     @SerializedName("labels")
     @Expose
-    private List<Object> labels = new ArrayList<Object>();
+    private List<String> labels = new ArrayList<String>();
     @SerializedName("customfield_10016")
     @Expose
     private Object customfield10016;
@@ -529,7 +529,7 @@ public class Fields {
      * @return
      *     The labels
      */
-    public List<Object> getLabels() {
+    public List<String> getLabels() {
         return labels;
     }
 
@@ -538,7 +538,7 @@ public class Fields {
      * @param labels
      *     The labels
      */
-    public void setLabels(List<Object> labels) {
+    public void setLabels(List<String> labels) {
         this.labels = labels;
     }
 
