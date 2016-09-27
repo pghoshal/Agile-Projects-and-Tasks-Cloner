@@ -1,6 +1,9 @@
 $(document).ready(function() {
 	document.getElementById('custom').style.display='none';
 	document.getElementById('message').style.display='none';
+	document.getElementById('result-page').style.display='none';
+	document.getElementById('front-page').style.display='';
+	
 	$("#progress-bar").hide();
 $("button#jQueryColorChange").on('click',function(){
     $(this).toggleClass('selected');
@@ -103,16 +106,22 @@ $("#load-all-button").on('click' ,function(){
 		    data: JSON.stringify( { "projectA":dd1 , "projectB": dd2, "baseUrl" :baseUrl, "issues" :[task, story, request, bug, subtask] , "customissue":customIssues} ),
 		    processData: false,
 		    success: function( data, textStatus, jQxhr ){
-		        AJS.progressBars.update("#progress-bar", 1);
-		        $("#progress-bar").hide();
-		        AJS.flag({
-		            type: 'info',
-		            title: 'Issues have been created.',
-		            body: '<ul class="aui-nav-actions-list">' +
-		                '<li><a href="#">View issue</a></li>' +
-		                '<li><a href="#">Add to sprint</a></li>' +
-		            '</ul>'
-		        });
+		    	alert('Success response : ');
+		    	$("#progress-bar").hide();
+		    	var i =0;
+		    	var responses = [];
+		    	responses = data;
+		    	alert(JSON.stringify(data))
+		    	var list = '';
+		    	for(i=0;i<responses.length;i++){
+		    		list = list + '<p style="margin-left: 65px;"> Issue URL : '+responses[i].self+'</p>' +'<p style="margin-left: 65px;"> Issue Id : '+responses[i].key+'</p>';
+		    	}
+		    	$('#innerhtml').html(list);
+		    	alert(list);
+		    	console.log(list);
+		    	alert('Change the page:');
+		    	document.getElementById('front-page').style.display='none';
+		    	document.getElementById('result-page').style.display='';
 		    },
 		    error: function( jqXhr, textStatus, errorThrown ){
 		        console.log( errorThrown );

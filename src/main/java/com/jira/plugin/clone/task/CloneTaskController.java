@@ -46,8 +46,10 @@ import com.jira.plugin.clone.create.schema.request.Priority;
 import com.jira.plugin.clone.create.schema.request.Project;
 import com.jira.plugin.clone.create.schema.request.Reporter;
 import com.jira.plugin.clone.create.schema.response.CreateIssueResponse;
+import com.jira.plugin.clone.create.schema.response.IssueCreateResponse;
 import com.jira.plugin.clone.issuesearch.schema.SearchIssue;
-import com.jira.plugin.clone.search.schema.Search;
+import com.jira.plugin.clone.schema.search.post.req.SearchPostReq;
+import com.jira.plugin.clone.schema.search.post.res.SearchPostRes;
 
 @Controller
 
@@ -116,39 +118,55 @@ public class CloneTaskController
 	@IgnoreJwt
 	@RequestMapping(value="/copyissues" , method=RequestMethod.POST)
 	public @ResponseBody String submitIssues(@RequestBody CopyIssueDTO copyIssueDTO ){
-		CreateIssueResponse issueCreateresponse=null;
-		CreateIssueResponse customIssueCreateresponse=null;
+		List<IssueCreateResponse> responseList = null;
+		IssueCreateResponse issueCreateresponse=null;
+		IssueCreateResponse customIssueCreateresponse=null;
 		AtlassianHost host=new AtlassianHost();
 		host.setBaseUrl(copyIssueDTO.getBaseUrl());
 		List<SearchIssue> searchIssueList = new ArrayList<SearchIssue>();
 		List<String> issueKeyList = new ArrayList<String>();
 		log.info("Base Url : "+copyIssueDTO.getBaseUrl());
-		Search search = restTemplate.getForObject(copyIssueDTO.getBaseUrl()+"/rest/api/latest/search/", Search.class);
-		
 		String projectFrom = copyIssueDTO.getProjectA();
+		SearchPostReq request = new SearchPostReq();
+		request.setJql("project="+projectFrom);
+		request.setStartAt(0);
+		request.setMaxResults(100);
+		ResponseEntity<SearchPostRes> searchPostRspEntity = restTemplate.postForEntity(copyIssueDTO.getBaseUrl()+"/rest/api/latest/search/", request, SearchPostRes.class);
+		SearchPostRes response = searchPostRspEntity.getBody();
+		//Search search = restTemplate.getForObject(copyIssueDTO.getBaseUrl()+"/rest/api/latest/search/", SearchPostReq.class,Search.class);
+		
 		Long projectId = (Long)restClient.getProjectClient().getProject(copyIssueDTO.getProjectB()).claim().getId();
 		log.info("Destination project id: "+projectId);
-		for (com.jira.plugin.clone.search.schema.Issue issue : search.getIssues()) {
+		for (com.jira.plugin.clone.schema.search.post.res.Issue issue : response.getIssues()) {
 			if(issue != null 
 					&& issue.getKey()!=null 
 					&& issue.getKey().contains(projectFrom)){
 				issueKeyList.add(issue.getKey());
 			}
 		}
+		responseList = new ArrayList<IssueCreateResponse>();
 		for (String issueKey : issueKeyList) {
 			SearchIssue issueSearch = restTemplate.getForObject(copyIssueDTO.getBaseUrl()+"/rest/api/latest/issue/"+issueKey, SearchIssue.class);
 			log.info("Issue Retrieve : "+issueSearch.getId());
 			log.info("Issue Retrieve Type: "+issueSearch.getFields().getIssuetype().getName());
 			issueCreateresponse = processAndCreateIssues(copyIssueDTO, issueCreateresponse, searchIssueList, projectId, issueSearch);
+			if(issueCreateresponse != null){
+				responseList.add(issueCreateresponse);
+				issueCreateresponse = null;
+			}
 			customIssueCreateresponse = processAndCreateCustomIssues(copyIssueDTO, customIssueCreateresponse, searchIssueList, projectId, issueSearch);
+			if(customIssueCreateresponse != null){
+				responseList.add(customIssueCreateresponse);
+				customIssueCreateresponse = null;
+			}
 		}
-		
-		 ModelAndView model = new ModelAndView();
-		
-		return issueCreateresponse!=null || customIssueCreateresponse!=null ?  "{"+"\"message\":\"success\""+"}" : "{"+"\"message\":\"error\""+"}";
+		Gson responseJson = new Gson();
+		log.info(responseJson.toJson(responseList));
+		return responseJson.toJson(responseList);
+		//return issueCreateresponse!=null || customIssueCreateresponse!=null ?  "{"+"\"message\":\"success\""+"}" : "{"+"\"message\":\"error\""+"}";
 	}
 
-	private CreateIssueResponse processAndCreateCustomIssues(CopyIssueDTO copyIssueDTO, CreateIssueResponse response,
+	private IssueCreateResponse processAndCreateCustomIssues(CopyIssueDTO copyIssueDTO, IssueCreateResponse response,
 			List<SearchIssue> searchIssueList, Long projectId, SearchIssue issueSearch) {
 		for(String issueType : copyIssueDTO.getCustomIssues()){
 			log.info("Issue Type : "+issueType);
@@ -157,7 +175,7 @@ public class CloneTaskController
 		return response;
 	}
 
-	private CreateIssueResponse processAndCreateIssues(CopyIssueDTO copyIssueDTO, CreateIssueResponse response,
+	private IssueCreateResponse processAndCreateIssues(CopyIssueDTO copyIssueDTO, IssueCreateResponse response,
 			List<SearchIssue> searchIssueList, Long projectId, SearchIssue issueSearch) {
 		for(String issueType : copyIssueDTO.getIssues()){
 			log.info("Issue Type : "+issueType);
@@ -166,9 +184,9 @@ public class CloneTaskController
 		return response;
 	}
 
-	private CreateIssueResponse createIssueToProject(CopyIssueDTO copyIssueDTO, CreateIssueResponse response,
+	private IssueCreateResponse createIssueToProject(CopyIssueDTO copyIssueDTO, IssueCreateResponse response,
 			List<SearchIssue> searchIssueList, Long projectId, SearchIssue issueSearch, String issueType) {
-		ResponseEntity<CreateIssueResponse> responseEntity;
+		ResponseEntity<IssueCreateResponse> responseEntity;
 		if(issueType !=null && issueType.equalsIgnoreCase(issueSearch.getFields().getIssuetype().getName())){
 			log.info("Issue type :"+issueSearch.getFields().getIssuetype().getId());
 			searchIssueList.add(issueSearch);
@@ -185,13 +203,14 @@ public class CloneTaskController
 		        headers.add("Content-Type", "application/json");
 		        HttpEntity httprequest = new HttpEntity(grequest.toJson(request).toString(), headers);
 		        try{
-		        	 responseEntity = restTemplate.postForEntity(copyIssueDTO.getBaseUrl()+"/rest/api/latest/issue", httprequest, CreateIssueResponse.class);
+		        	 responseEntity = restTemplate.postForEntity(copyIssueDTO.getBaseUrl()+"/rest/api/latest/issue", httprequest, IssueCreateResponse.class);
 		        	 response = responseEntity.getBody();
+		        	 log.info(issueSearch.getId()+" :::: Issue Created  :"+response);
 		        }catch(Exception e){
+		        	response = null;
 		        	log.info("Issue Not Created");
 		        	e.printStackTrace();
 		        }
-			log.info(issueSearch.getId()+" :::: Issue Created  :"+response);
 		}
 		return response;
 	}
@@ -250,11 +269,11 @@ public class CloneTaskController
 	private void populateAssignee(SearchIssue issueSearch, Fields fields) {
 		com.jira.plugin.clone.issuesearch.schema.Assignee assigneeSearch = issueSearch.getFields().getAssignee();
 		Assignee assignee =new Assignee();
-		String name="Unassigned";	
+		String name="";	
 		if(assigneeSearch !=null && assigneeSearch.getName()!=null){
 			name = assigneeSearch.getName();
-			assignee.setName(name);
 		}
+		assignee.setName(name);
 		fields.setAssignee(assignee );
 	}
 

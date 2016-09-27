@@ -1,6 +1,6 @@
 {
   "key": "agile-projects-and-tasks-cloner",
-  "baseUrl": "https://a8c07148.ngrok.io",
+  "baseUrl": "https://2e26e3e9.ngrok.io",
   "name": "Agile Projects and Tasks Cloner",
   "authentication": {
     "type": "jwt"

@@ -12,6 +12,7 @@ public class CreateIssueResponse
 
     private String type;
 
+
     public String getId ()
     {
         return id;
