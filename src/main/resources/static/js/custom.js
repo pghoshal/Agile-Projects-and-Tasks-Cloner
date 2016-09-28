@@ -106,20 +106,33 @@ $("#load-all-button").on('click' ,function(){
 		    data: JSON.stringify( { "projectA":dd1 , "projectB": dd2, "baseUrl" :baseUrl, "issues" :[task, story, request, bug, subtask] , "customissue":customIssues} ),
 		    processData: false,
 		    success: function( data, textStatus, jQxhr ){
-		    	alert('Success response : ');
+		    	//alert('Success response : ');
 		    	$("#progress-bar").hide();
 		    	var i =0;
 		    	var responses = [];
 		    	responses = data;
-		    	alert(JSON.stringify(data))
+		    	//alert(JSON.stringify(data))
 		    	var list = '';
+		    	var j=0;
 		    	for(i=0;i<responses.length;i++){
-		    		list = list + '<p style="margin-left: 65px;"> Issue URL : '+responses[i].self+'</p>' +'<p style="margin-left: 65px;"> Issue Id : '+responses[i].key+'</p>';
+		    		j=1;
+		    		list = list+ '<div class="aui-message aui-message-success">'+
+		    	   ' <p class="title">'+
+		    	        '<strong>Success!</strong>'+
+		    	    '</p>'+
+		    	    '<p>Issue URL : '+responses[i].self +'</p>'+
+		    	    '<p>Issue Id : '+responses[i].key +'</p>'+
+		    	'</div>';
+		    		//list = list + '<p style="margin-left: 65px;"> Issue URL : '+responses[i].self+'</p>' +'<p style="margin-left: 65px;"> Issue Id : '+responses[i].key+'</p>';
 		    	}
+		    	if(j==0){
+		    		$('#innerhtml').html('<center><p>No Such Issues are available to Copy</p></center>');
+		    	}else{
 		    	$('#innerhtml').html(list);
-		    	alert(list);
-		    	console.log(list);
-		    	alert('Change the page:');
+		    	}
+		    	//alert(list);
+		    	//console.log(list);
+		    	//alert('Change the page:');
 		    	document.getElementById('front-page').style.display='none';
 		    	document.getElementById('result-page').style.display='';
 		    },
