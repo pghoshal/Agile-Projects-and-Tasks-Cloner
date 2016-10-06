@@ -118,10 +118,10 @@ $("#load-all-button").on('click' ,function(){
 		    		j=1;
 		    		list = list+ '<div class="aui-message aui-message-success">'+
 		    	   ' <p class="title">'+
-		    	        '<strong>Success!</strong>'+
+		    	        '<strong>Successfully Copied from Issue <a href='+responses[i].sourceUrl+' target="_blank" >'+responses[i].source+'</a></strong>'+
 		    	    '</p>'+
-		    	    '<p>Issue URL : '+responses[i].self +'</p>'+
-		    	    '<p>Issue Id : '+responses[i].key +'</p>'+
+		    	    /*'<p>Issue URL : '+responses[i].self +'</p>'+*/
+		    	    '<p>Created Issue Id : <a href='+responses[i].destUrl+' target="_blank">'+responses[i].destination +'</a></p>'+
 		    	'</div>';
 		    		//list = list + '<p style="margin-left: 65px;"> Issue URL : '+responses[i].self+'</p>' +'<p style="margin-left: 65px;"> Issue Id : '+responses[i].key+'</p>';
 		    	}

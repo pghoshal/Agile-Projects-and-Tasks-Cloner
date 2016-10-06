@@ -118,6 +118,7 @@ public class CloneTaskController
 	@IgnoreJwt
 	@RequestMapping(value="/copyissues" , method=RequestMethod.POST)
 	public @ResponseBody String submitIssues(@RequestBody CopyIssueDTO copyIssueDTO ){
+		List<IssueCopyResponse> resultList = null;
 		List<IssueCreateResponse> responseList = null;
 		IssueCreateResponse issueCreateresponse=null;
 		IssueCreateResponse customIssueCreateresponse=null;
@@ -145,24 +146,36 @@ public class CloneTaskController
 			}
 		}
 		responseList = new ArrayList<IssueCreateResponse>();
+		resultList = new ArrayList<IssueCopyResponse>();
 		for (String issueKey : issueKeyList) {
+			String dest = null;
 			SearchIssue issueSearch = restTemplate.getForObject(copyIssueDTO.getBaseUrl()+"/rest/api/latest/issue/"+issueKey, SearchIssue.class);
 			log.info("Issue Retrieve : "+issueSearch.getId());
 			log.info("Issue Retrieve Type: "+issueSearch.getFields().getIssuetype().getName());
 			issueCreateresponse = processAndCreateIssues(copyIssueDTO, issueCreateresponse, searchIssueList, projectId, issueSearch);
 			if(issueCreateresponse != null){
 				responseList.add(issueCreateresponse);
-				issueCreateresponse = null;
+				dest = issueCreateresponse.getKey();
 			}
 			customIssueCreateresponse = processAndCreateCustomIssues(copyIssueDTO, customIssueCreateresponse, searchIssueList, projectId, issueSearch);
 			if(customIssueCreateresponse != null){
 				responseList.add(customIssueCreateresponse);
+				dest = customIssueCreateresponse.getKey();
+			}
+			if(issueCreateresponse!=null || customIssueCreateresponse != null){
+				final IssueCopyResponse result = new IssueCopyResponse();
+				result.setSource(issueKey);
+				result.setUrl(copyIssueDTO.getBaseUrl()+"/browse/"+issueKey);
+				result.setDestination(dest);
+				result.setDestUrl(copyIssueDTO.getBaseUrl()+"/browse/"+dest);
+				resultList.add(result);
+				issueCreateresponse = null;dest = null;
 				customIssueCreateresponse = null;
 			}
 		}
 		Gson responseJson = new Gson();
-		log.info(responseJson.toJson(responseList));
-		return responseJson.toJson(responseList);
+		log.info(responseJson.toJson(resultList));
+		return responseJson.toJson(resultList);
 		//return issueCreateresponse!=null || customIssueCreateresponse!=null ?  "{"+"\"message\":\"success\""+"}" : "{"+"\"message\":\"error\""+"}";
 	}
 
