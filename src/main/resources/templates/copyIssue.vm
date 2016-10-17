@@ -10,6 +10,7 @@
 	src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui-experimental.js"></script>
 <script
 	src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui-datepicker.js"></script>
+<script src="/js/require.min.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="//aui-cdn.atlassian.com/aui-adg/5.10.1/css/aui.css" />
 <link rel="stylesheet" type="text/css"
@@ -26,6 +27,7 @@
 
 </head>
 <body>
+	<!-- <section id="content" role="main">-->
 	<!-- / External dependencies -->
 	<div id="aui-message-bar"></div>
 	<div class="row" style="margin-top: 30px;"></div>
@@ -37,124 +39,141 @@
 		<input type="hidden" id="baseUrl" value="${baseUrl}" />
 		<div class="col-md-1"></div>
 		<div class="col-md-10">
-			<h3>Welcome to agile projects cloner</h3>
-			<p style="margin-top: 10px;">Agile Project Cloner is here to help
-				you clone tasks from one single project and copy them to another
-				project in your JIRA Cloud Instance. Please note that the tasks you
-				will copy and move to another project will still remain in your
-				original project therefore you can easily progress any work on them
-				and on the project.</p>
-			<div class="error">Please Select</div>
-			<div class="row">
-				<div class="col-md-1"></div>
-				<div class="col-md-10">
-					<p style="margin-top: 5px;">STEP 1 SELECT THE PROJECT FROM
-						WHICH YOU WANT TO COPY TASKS</p>
-					<form class="aui">
-						<p>
+			<h3>Welcome to Agile Projects and Tasks Cloner</h3>
+			<p style="margin-top: 10px;">Agile Projects and Tasks Cloner clone tasks from one project to the another project in the same JIRA Cloud Instance. This Add On will load standard issue types and any custom issue types it will find in your JIRA. It displays both of these issue groups on the screen below. </p>
+			<p style="margin-top: 10px;">You simply select the project from which you want to copy tasks, then select project to which you want to paste tasks and Copy them, decide which issue types you need to copy and copy them. </p>
+			<!--<div class="error">Please Select</div>-->
+			<div class="row" style="margin-top: 10px;">
+				<table style="margin-top: 20px;margin-left: 20px;">
+					<tr>
+						<td style="margin-top: 20px;">
+							<p>Issues from project</p>
+						</td>
+						<td></td>
+						<td style="margin-top: 20px;">
 							<aui-select id="sync-product-single-select-1" name="product"
 								placeholder="From project"> #foreach($project in
 							$projectList) <aui-option value="$project.key">$project.name</aui-option>
 							#end </aui-select>
-						</p>
-					</form>
-				</div>
-				<div class="col-md-1"></div>
-			</div>
-			<div class="row">
-				<div class="col-md-1"></div>
-				<div class="col-md-10">
-					<p style="margin-top: 5px;">STEP 2 SELECT THE PROJECT TO WHICH
-						YOU WANT TO PASTE TASKS</p>
-					<form class="aui">
-						<p>
+						</td>
+					</tr>
+					<tr>
+						<td style="margin-top: 20px;">
+							<p>Issues to project</p>
+						</td>
+						<td></td>
+						<td style="margin-top: 20px;">
 							<aui-select id="sync-product-single-select-2" name="product"
 								placeholder="To project"> #foreach($project in
 							$projectList) <aui-option value="$project.key">$project.name</aui-option>
 							#end </aui-select>
-						</p>
-					</form>
-				</div>
-				<div class="col-md-1"></div>
+						</td>
+					</tr>
+					<tr>
+						<td style="margin-top: 20px;">
+							<p>Load custom issues</p>
+						</td>
+						<td></td>
+						<td style="margin-top: 20px;">
+							<aui-label for="load-custom-issues">Load custom issues</aui-label>
+							<aui-toggle id="load-custom-issues" label="Load custom issues"></aui-toggle>
+						</td>
+					</tr>
+					<tr class="group" id="issues">
+					<td>
+                        <span>Copy</span>
+                    </td>
+                    <td></td>
+					<td style="margin-top: 20px;">
+						<fieldset class="group" id="copy-issues-list">
+						<table  cellspacing="10">
+				  			<tr>
+                        	<td>
+                        	<div class="checkbox">
+                          		<input class="checkbox" type="checkbox" name="check_tasks" value="task" id="copy-task">
+                          		<label for="checkBoxThree">Task</label>
+                      		</div>
+                      		<div class="checkbox">
+                          		<input class="checkbox" type="checkbox" name="check_tasks" value="story" id="copy-story">
+                          		<label for="checkBoxOne">User stories</label>
+                      		</div>
+                      		<div class="checkbox">
+                          		<input class="checkbox" type="checkbox" name="check_tasks" value="request" id="copy-request">
+                          		<label for="checkBoxTwo">Feature requests</label>
+                      		</div>
+                      		<div class="checkbox">
+                          		<input class="checkbox" type="checkbox" name="check_tasks" value="bug" id="copy-bug">
+                          		<label for="checkBoxThree">Bugs</label>
+                      		</div>
+                      		<div class="checkbox">
+                          		<input class="checkbox" type="checkbox" name="check_tasks" value="sub-task" id="copy-subtask">
+                          		<label for="checkBoxThree">Sub tasks</label>
+                      		</div>
+                      		</td>
+                      </tr>
+                      </table>
+                      </fieldset>
+                      </td>
+                  	</tr>
+                  	<tr class="group" id="customissues">
+                  	  <td style="margin-top: 20px;">	
+                  	  <fieldset class="group hidden" id="load-custom-issues-list">
+                  		<table cellspacing="10">
+				  			<tr>
+								<td>
+                      				<span>Load</span>
+                      			</td>
+                      			<td></td>
+                      			<td>
+                      				<div id="checkbox-list"></div>
+                      			</td>
+                     		</tr>
+                      	</table>
+                  	  </fieldset>
+                  	</td>
+					</tr>
+					<tr>
+						<td style="margin-top: 20px;margin-left: 40px;">
+						<div class="buttons-container">
+         					<div class="buttons">
+         						<input class="aui-button aui-button-primary submit" type="submit" value="Copy" id="load-all-button">
+            					<a class="cancel" href="#">Cancel</a>
+         					</div>
+     					</div>
+						</td>
+					</tr>
+				</table>
 			</div>
-			<div class="row">
-				<div class="col-md-1"></div>
-				<div class="col-md-10">
-					<p style="margin-top: 5px;">STEP 3 SELECT ISSUE TYPES YOU WANT
-						TO COPY</p>
-				</div>
-				<div class="col-md-1"></div>
 			</div>
-
-			<div class="row" style="margin-top: 20px;">
-				<div class="col-md-2"></div>
-				<div class="col-md-8" style="margin-left: 65px;">
-					<button class="aui-button aui-button-primary" value="task"
-						id="dialog-show-button-1">TASKS</button>
-					<button class="aui-button aui-button-primary" value="story"
-						id="dialog-show-button-2">USER STORIES</button>
-					<button class="aui-button aui-button-primary" value="request"
-						id="dialog-show-button-3">FEATURE REQUESTS</button>
-					<button class="aui-button aui-button-primary" value="bug"
-						id="dialog-show-button-4">BUGS</button>
-					<button class="aui-button aui-button-primary" value="sub-task"
-						id="dialog-show-button-5">SUB TASKS</button>
-				</div>
-				<div class="col-md-2"></div>
-			</div>
-			<div class="row" style="margin-top: 20px;">
-				<div class="col-md-3"></div>
-				<div class="col-md-6">
-					<table cellspacing="5" id="custom">
-						<tr>
-							<div id="customfield">
-								<td valign="middle" style="padding-right: 30px">
-									<p style="font-size: 13px">I WANT TO COPY CUSTOM ISSUE
-										TYPES</p>
-								</td>
-								<td valign="middle">
-									<div class="field-group">
-										<select class="multi-select" size="5" multiple="multiple"
-											id="multiselect" name="multiselect">
-										</select>
-									</div>
-								</td>
-							</div>
-						</tr>
-					</table>
-					<table cellspacing="5" id="message">
-						<tr id="message">
-							<td>
-								<p style="font-size: 20px">No Custom issue for Selected
-									Project</p>
-							</td>
-						</tr>
-					</table>
-					<table cellspacing="5">
-						<tr style="margin-top: 20px;">
-							<td valign="middle" style="padding-right: 30px">
-								<p style="font-size: 13px">I WANT TO COPY ALL OF ISSUES</p>
-							</td>
-							<td valign="middle">
-								<button class="aui-button aui-button-primary"
-									id="load-all-button" style="background: #E78270;">COPY ALL ISSUE</button>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<div class="col-md-3"></div>
-			</div>
-		</div>
-	<div class="col-md-1"></div>
+			<div class="col-md-1"></div>
 	</div>
 	<div class="row" id="result-page">
-	<center><p style="font-size: 20px">Issue Copied from Selected Project</p></center>
-	<div class="col-md-1"></div>
-		
-		<div class="col-md-10" id="innerhtml">
-		</div>
+		<div class="row" id="result">
+		<p style="margin-top: 20px;margin-left: 40px; font-size: 20px">Successfully copied tasks  </p> <!--from project $projectA to project $projectB-->
+		<p style="margin-top: 20px;margin-left: 40px; font-size: 15px">Below is the list of all issues you have copied just now. They were placed in the project backlog and you can always find 
+		them  there to start grooming the backlog and planning active sprints. You can quickly navigate from here to get into selected issue type details</p>
 		<div class="col-md-1"></div>
+			<div class="col-md-10" id="innerhtml">
+			</div>
+			<div class="col-md-1"></div>
+			</div>
+			<div class="row" id="pagination">
+			<!--<div id="listingTable"></div>
+				<a href="javascript:prevPage()" id="btn_prev">Prev</a>
+				<a href="javascript:nextPage()" id="btn_next">Next</a>-->
+			 <!--<ol class="aui-nav aui-nav-pagination">
+    			<li class="aui-nav-previous"><a href="#">Prev</a></li>
+    			<li><a href="http://example.com/">1</a></li>
+    			<li class="aui-nav-selected">2</li>
+    			<li><a href="http://example.com/">3</a></li>
+    			<li class="aui-nav-truncation"><a href="http://example.com/" id="pagination-truncation">&hellip;</a></li>
+    			<li><a href="http://example.com/">998</a></li>
+    			<li><a href="http://example.com/">999</a></li>
+    			<li class="aui-nav-next"><a href="#">Next</a></li>
+			 </ol>-->
+			</div>
 	</div>
+	
 	<script id="connect-loader" data-options="sizeToParent:true;">
 		(function() {
 			var getUrlParam = function(param) {
@@ -178,7 +197,14 @@
 		})();
 	</script>
 	<script language="JavaScript" type="text/javascript">
-		
+        var toggle = document.getElementById('load-custom-issues');
+        toggle.addEventListener('change', function(e) {
+                      $("#copy-issues-list").toggleClass('hidden');
+                      $("#load-custom-issues-list").toggleClass('hidden');
+        });
+	</script>
+	<script language="javaScript" type="text/javascript">
+
 	</script>
 </body>
 </html>

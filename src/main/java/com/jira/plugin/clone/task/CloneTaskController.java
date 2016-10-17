@@ -45,7 +45,6 @@ import com.jira.plugin.clone.create.schema.request.Issuetype;
 import com.jira.plugin.clone.create.schema.request.Priority;
 import com.jira.plugin.clone.create.schema.request.Project;
 import com.jira.plugin.clone.create.schema.request.Reporter;
-import com.jira.plugin.clone.create.schema.response.CreateIssueResponse;
 import com.jira.plugin.clone.create.schema.response.IssueCreateResponse;
 import com.jira.plugin.clone.issuesearch.schema.SearchIssue;
 import com.jira.plugin.clone.schema.search.post.req.SearchPostReq;
@@ -74,6 +73,7 @@ public class CloneTaskController
 	    return model;
 	}
 	
+	@IgnoreJwt
 	@RequestMapping(value = "/clone", method = RequestMethod.GET)
 	public ModelAndView cloneIssue(@AuthenticationPrincipal AtlassianHostUser hostUser) throws URISyntaxException {
 		factory = new JiraRestClientFactoryImpl();
@@ -105,11 +105,13 @@ public class CloneTaskController
         	projectList.add(item);
         }
 	    model.setViewName("copyIssue");
+        /*model.setViewName("indexpage");*/
 	    //model.addObject("commonIssueTypes",commonIssueTypes);
 	   // model.addObject("customIssueTypes",customIssueTypes);
 	    
 	    model.addObject("projectList", projectList);
 	    model.addObject("baseUrl", host.getBaseUrl());
+	    //log.info("Redirecting to index page");
 	   // model.addObject("issueTypeList",issueTypeList);
 	    return model;
 	}
@@ -394,6 +396,8 @@ public class CloneTaskController
 					issueList.add(name);
 			}
 		}
-		return new Gson().toJson(issueList);
+		String res=  new Gson().toJson(issueList);
+		log.info(res);
+		return res;
 	}
 }

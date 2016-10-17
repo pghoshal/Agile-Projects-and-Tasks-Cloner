@@ -8,3 +8,8 @@ td
   padding-top: 10px !important;
   padding-bottom: 10px !important;
 }
+.aui-page-focused-xlarge #content .aui-page-panel,
+.aui-page-size-xlarge #content .aui-page-panel {
+	max-width: 980px;
+    width: 96%;
+}    
