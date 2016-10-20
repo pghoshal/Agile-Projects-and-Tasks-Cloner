@@ -5,16 +5,15 @@
 <script src="$atlassian-connect-locale" type="text/javascript"></script>
 <script src="$atlassian-connect-timezone" type="text/javascript"></script>
 <script src="/js/jquery.min.js"></script>
-<script src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui.js"></script>
-<script
-	src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui-experimental.js"></script>
+<script src="//aui-cdn.atlassian.com/aui-adg/6.0.0/js/aui.js"></script>
+<script src="//aui-cdn.atlassian.com/aui-adg/6.0.0/js/aui-experimental.js"></script>	
 <script
 	src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui-datepicker.js"></script>
 <script src="/js/require.min.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="//aui-cdn.atlassian.com/aui-adg/5.10.1/css/aui.css" />
+	href="//aui-cdn.atlassian.com/aui-adg/6.0.0/css/aui.css" />
 <link rel="stylesheet" type="text/css"
-	href="//aui-cdn.atlassian.com/aui-adg/5.10.1/css/aui-experimental.css" />
+	href="//aui-cdn.atlassian.com/aui-adg/6.0.0/css/aui-experimental.css" />
 <link rel="stylesheet" type="text/css" href="/css/custom.css" />
 <script src="/js/sinon.js"></script>
 
@@ -148,20 +147,19 @@
 			<div class="col-md-1"></div>
 	</div>
 	<div class="row" id="result-page">
-		<div class="row" id="result">
-		<div id="header-response" class="row" style="background-color:Gainsboro;">
-			<table style="margin-top: 20px;margin-left: 50px; font-size: 20px">
-				<tr>
-				<td>Successfully copied tasks from project <span id="projectA"></span> to project <span id="projectB"></span></td>
-				<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-				<td style="text-align:right;">
+		<div id="result">
+		<div id="header-response" class="row" style=" vertical-align: middle;  background-color:#f1f1f1!important; height:70px;">
+			<table align="center" style="padding-left: 68px; font-size: 20px" height=100% width="90%">
+				<tr valign="middle">
+				<td >Successfully copied tasks from project <span id="projectA"></span> to project <span id="projectB"></span></td>
+				
+				<td  align="right" style="margin-right: 100px;" >
 				<form action="/secure/RapidBoard.jspa?projectKey={$("#sync-product-single-select-2").val()}&view=planning.nodetail">
 					<button class="aui-button" style="align:right;" id="backlog">Go To Backlog</button></td>
 				</form>
 				</tr>
 			</table>
-			<!--<p style="margin-top: 20px;margin-left: 50px; font-size: 20px">
-			Successfully copied tasks from project <span id="projectA"></span> to project <span id="projectB"></span> <button class="aui-button" style="align:right;" id="backlog">Go To Backlog</button></p>-->
+			
 		</div>
 		<p style="margin-top: 20px; margin-left: 50px;font-size: 15px">Below is the list of all issues you have copied just now. They were placed in the project backlog and you can always find 
 		them  there to start grooming the backlog and planning active sprints. You can quickly navigate from here to get into selected issue type details</p>
