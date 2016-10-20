@@ -101,7 +101,6 @@ $("#load-all-button").on('click' ,function(){
             AJS.progressBars.setIndeterminate("#progress-bar");
         } 
         var baseUrl= $('input#baseUrl').val()
-		alert(select);
 		$.ajax({
 		    url: '/copyissues',
 		    dataType: 'json',
@@ -116,7 +115,8 @@ $("#load-all-button").on('click' ,function(){
 		    	var responses = [];
 		    	responses = data;
 		    	//alert(JSON.stringify(data))
-		    	var list = '<table class="aui">';
+		    	//Populate projectFrom and projectTo
+		    	var list = '<table class="table table-bordered">';
 		    	var j=0;
 		    	for(i=0;i<responses.length;i++){
 		    		j=1;
@@ -131,10 +131,12 @@ $("#load-all-button").on('click' ,function(){
 		    		//list = list + '<p style="margin-left: 65px;"> Issue URL : '+responses[i].self+'</p>' +'<p style="margin-left: 65px;"> Issue Id : '+responses[i].key+'</p>';
 		    	}
 		    	if(responses.length>0){
+		    		$('#projectA').html(dd1);
+		    		$('#projectB').html(dd2);
 		    		list = list+'</table>';
 		    		$('#innerhtml').html(list);
 		    	}else{
-		    		$('#innerhtml').html('<table class="aui"><tr><td><center><p>No Such Issues are available to Copy</p></center></td></tr></table>');
+		    		$('#innerhtml').html('<table class="table table-bordered"><tr><td><center><p>No Such Issues are available to Copy</p></center></td></tr></table>');
 		    	}
 		    	document.getElementById('front-page').style.display='none';
 		    	document.getElementById('result-page').style.display='';
@@ -183,6 +185,170 @@ $("#load-custom-issues").on("change", function (){
 	        	$("#checkbox-list").html(options);
 	        	document.getElementById('issues').style.display='none';
 	        	document.getElementById('customissues').style.display='';
+	        	/* * * * * * * * * * * * * * * * *
+	        	 * Pagination
+	        	 * javascript page navigation
+	        	 * * * * * * * * * * * * * * * * */
+
+	        	var Pagination = {
+
+	        	    code: '',
+
+	        	    // --------------------
+	        	    // Utility
+	        	    // --------------------
+
+	        	    // converting initialize data
+	        	    Extend: function(data) {
+	        	        data = data || {};
+	        	        Pagination.size = data.size || 300;
+	        	        Pagination.page = data.page || 1;
+	        	        Pagination.step = data.step || 3;
+	        	    },
+
+	        	    // add pages by number (from [s] to [f])
+	        	    Add: function(s, f) {
+	        	        for (var i = s; i < f; i++) {
+	        	            Pagination.code += '<a>' + i + '</a>';
+	        	        }
+	        	    },
+
+	        	    // add last page with separator
+	        	    Last: function() {
+	        	        Pagination.code += '<i>...</i><a>' + Pagination.size + '</a>';
+	        	    },
+
+	        	    // add first page with separator
+	        	    First: function() {
+	        	        Pagination.code += '<a>1</a><i>...</i>';
+	        	    },
+
+
+
+	        	    // --------------------
+	        	    // Handlers
+	        	    // --------------------
+
+	        	    // change page
+	        	    Click: function() {
+	        	        Pagination.page = +this.innerHTML;
+	        	        Pagination.Start();
+	        	    },
+
+	        	    // previous page
+	        	    Prev: function() {
+	        	        Pagination.page--;
+	        	        if (Pagination.page < 1) {
+	        	            Pagination.page = 1;
+	        	        }
+	        	        Pagination.Start();
+	        	    },
+
+	        	    // next page
+	        	    Next: function() {
+	        	        Pagination.page++;
+	        	        if (Pagination.page > Pagination.size) {
+	        	            Pagination.page = Pagination.size;
+	        	        }
+	        	        Pagination.Start();
+	        	    },
+
+
+
+	        	    // --------------------
+	        	    // Script
+	        	    // --------------------
+
+	        	    // binding pages
+	        	    Bind: function() {
+	        	        var a = Pagination.e.getElementsByTagName('a');
+	        	        for (var i = 0; i < a.length; i++) {
+	        	            if (+a[i].innerHTML === Pagination.page) a[i].className = 'current';
+	        	            a[i].addEventListener('click', Pagination.Click, false);
+	        	        }
+	        	    },
+
+	        	    // write pagination
+	        	    Finish: function() {
+	        	        Pagination.e.innerHTML = Pagination.code;
+	        	        Pagination.code = '';
+	        	        Pagination.Bind();
+	        	    },
+
+	        	    // find pagination type
+	        	    Start: function() {
+	        	        if (Pagination.size < Pagination.step * 2 + 6) {
+	        	            Pagination.Add(1, Pagination.size + 1);
+	        	        }
+	        	        else if (Pagination.page < Pagination.step * 2 + 1) {
+	        	            Pagination.Add(1, Pagination.step * 2 + 4);
+	        	            Pagination.Last();
+	        	        }
+	        	        else if (Pagination.page > Pagination.size - Pagination.step * 2) {
+	        	            Pagination.First();
+	        	            Pagination.Add(Pagination.size - Pagination.step * 2 - 2, Pagination.size + 1);
+	        	        }
+	        	        else {
+	        	            Pagination.First();
+	        	            Pagination.Add(Pagination.page - Pagination.step, Pagination.page + Pagination.step + 1);
+	        	            Pagination.Last();
+	        	        }
+	        	        Pagination.Finish();
+	        	    },
+
+
+
+	        	    // --------------------
+	        	    // Initialization
+	        	    // --------------------
+
+	        	    // binding buttons
+	        	    Buttons: function(e) {
+	        	        var nav = e.getElementsByTagName('a');
+	        	        nav[0].addEventListener('click', Pagination.Prev, false);
+	        	        nav[1].addEventListener('click', Pagination.Next, false);
+	        	    },
+
+	        	    // create skeleton
+	        	    Create: function(e) {
+
+	        	        var html = [
+	        	            '<a>&#9668;</a>', // previous button
+	        	            '<span></span>',  // pagination container
+	        	            '<a>&#9658;</a>'  // next button
+	        	        ];
+
+	        	        e.innerHTML = html.join('');
+	        	        Pagination.e = e.getElementsByTagName('span')[0];
+	        	        Pagination.Buttons(e);
+	        	    },
+
+	        	    // init
+	        	    Init: function(e, data) {
+	        	        Pagination.Extend(data);
+	        	        Pagination.Create(e);
+	        	        Pagination.Start();
+	        	    }
+	        	};
+
+
+
+	        	/* * * * * * * * * * * * * * * * *
+	        	* Initialization
+	        	* * * * * * * * * * * * * * * * */
+
+	        	var init = function() {
+	        	    Pagination.Init(document.getElementById('pagination'), {
+	        	        size: 30, // pages size
+	        	        page: 1,  // selected page
+	        	        step: 3   // pages before and after current
+	        	    });
+	        	};
+
+	        	document.addEventListener('DOMContentLoaded', init, false);
+
+
+
 	        } else {
 	        	var nocheckboxmessage = '<div id="message"><p>No custom issue to copy </p></div>';
 	        	$("#checkbox-list").html(nocheckboxmessage);
@@ -266,6 +432,16 @@ function numPages(){
 window.onload = function() {
 	changePage(1);
 };*/
+jQuery('#hideshow').on('click', function(event) {        
+    //jQuery('#content').toggle('show');
+    var toggle = document.getElementById('load-custom-issues');
+    toggle.addEventListener('change', function(e) {
+                  $("#copy-issues-list").toggleClass('hidden');
+                  $("#load-custom-issues-list").toggleClass('hidden');
+    });
+});
+
+
 
 });
 

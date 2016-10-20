@@ -30,12 +30,11 @@
 	<!-- <section id="content" role="main">-->
 	<!-- / External dependencies -->
 	<div id="aui-message-bar"></div>
-	<div class="row" style="margin-top: 30px;"></div>
-	<div class="row" id="front-page">
-		<div id="progress-bar" class="aui-progress-indicator">
-			<span class="aui-progress-indicator-value"></span>
-
-		</div>
+	<!--<div class="row" style="margin-top: 30px;"></div>-->
+	<div id="progress-bar" class="aui-progress-indicator">
+		<span class="aui-progress-indicator-value"></span>
+	</div>
+	<div class="row" id="front-page" style="margin-top: 15px;">
 		<input type="hidden" id="baseUrl" value="${baseUrl}" />
 		<div class="col-md-1"></div>
 		<div class="col-md-10">
@@ -46,8 +45,8 @@
 			<div class="row" style="margin-top: 10px;">
 				<table style="margin-top: 20px;margin-left: 20px;">
 					<tr>
-						<td style="margin-top: 20px;">
-							<p>Issues from project</p>
+						<td style="margin-top: 20px;align:right;">
+							<p>Issues from project &nbsp;&nbsp;</p>
 						</td>
 						<td>&nbsp;&nbsp;</td>
 						<td style="margin-top: 20px;">
@@ -58,8 +57,8 @@
 						</td>
 					</tr>
 					<tr>
-						<td style="margin-top: 20px;">
-							<p>Issues to project</p>
+						<td style="margin-top: 20px;align:right;">
+							<p>Issues to project &nbsp;&nbsp;</p>
 						</td>
 						<td>&nbsp;&nbsp;</td>
 						<td style="margin-top: 20px;">
@@ -70,12 +69,12 @@
 						</td>
 					</tr>
 					<tr>
-						<td>
-							<p>Load custom issues</p>
+						<td style="align:right;">
+							<p>Load custom issues &nbsp;&nbsp;</p>
 						</td>
 						<td>&nbsp;&nbsp;</td>
 						<td style="margin-top: 20px;">
-							<aui-toggle id="load-custom-issues"></aui-toggle>
+							<aui-toggle id="load-custom-issues" tooltip-on="Enabled" tooltip-off="Disabled"></aui-toggle>
 						</td>
 					</tr>
 					<tr class="group" id="issues">
@@ -89,23 +88,23 @@
 				  			<tr>
                         	<td>
                         	<div class="checkbox">
-                          		<input class="checkbox" type="checkbox" name="check_tasks" value="task" id="copy-task">
+                          		<input type="checkbox" name="check_tasks" value="task" id="copy-task">
                           		<label for="checkBoxThree">Task</label>
                       		</div>
                       		<div class="checkbox">
-                          		<input class="checkbox" type="checkbox" name="check_tasks" value="story" id="copy-story">
+                          		<input type="checkbox" name="check_tasks" value="story" id="copy-story">
                           		<label for="checkBoxOne">User stories</label>
                       		</div>
                       		<div class="checkbox">
-                          		<input class="checkbox" type="checkbox" name="check_tasks" value="request" id="copy-request">
+                          		<input type="checkbox" name="check_tasks" value="request" id="copy-request">
                           		<label for="checkBoxTwo">Feature requests</label>
                       		</div>
                       		<div class="checkbox">
-                          		<input class="checkbox" type="checkbox" name="check_tasks" value="bug" id="copy-bug">
+                          		<input type="checkbox" name="check_tasks" value="bug" id="copy-bug">
                           		<label for="checkBoxThree">Bugs</label>
                       		</div>
                       		<div class="checkbox">
-                          		<input class="checkbox" type="checkbox" name="check_tasks" value="sub-task" id="copy-subtask">
+                          		<input type="checkbox" name="check_tasks" value="sub-task" id="copy-subtask">
                           		<label for="checkBoxThree">Sub tasks</label>
                       		</div>
                       		</td>
@@ -115,14 +114,14 @@
                       </td>
                   	</tr>
                   	<tr class="group" id="customissues">
-                  	  <td style="margin-top: 20px;">	
-                  	  <fieldset class="group hidden" id="load-custom-issues-list">
+                  	  <td style="margin-top: 20px;align:right;">
+                  	  	<span>Load</span>
+                  	  </td>	
+                  	  <td>&nbsp;&nbsp;</td>
+                  	  <td>
+                  	  	<fieldset class="group hidden" id="load-custom-issues-list">
                   		<table cellspacing="10">
 				  			<tr>
-								<td>
-                      				<span>Load</span>
-                      			</td>
-                      			<td>&nbsp;&nbsp;</td>
                       			<td>
                       				<div id="checkbox-list"></div>
                       			</td>
@@ -132,6 +131,8 @@
                   	</td>
 					</tr>
 					<tr>
+					<hr/>
+					<td>&nbsp;</td><td>&nbsp;</td>
 						<td style="margin-top: 20px;margin-left: 40px;">
 						<div class="buttons-container">
          					<div class="buttons">
@@ -148,13 +149,24 @@
 	</div>
 	<div class="row" id="result-page">
 		<div class="row" id="result">
-		<p style="margin-top: 20px;margin-left: 40px; font-size: 20px">Successfully copied tasks  </p> <!--from project $projectA to project $projectB-->
-		<p style="margin-top: 20px;margin-left: 40px; font-size: 15px">Below is the list of all issues you have copied just now. They were placed in the project backlog and you can always find 
+		<div id="header-response" class="row" style="background-color:Gainsboro;">
+			<table style="margin-top: 20px;margin-left: 50px; font-size: 20px">
+				<tr>
+				<td>Successfully copied tasks from project <span id="projectA"></span> to project <span id="projectB"></span></td>
+				<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+				<td style="text-align:right;">
+				<form action="/secure/RapidBoard.jspa?projectKey={$("#sync-product-single-select-2").val()}&view=planning.nodetail">
+					<button class="aui-button" style="align:right;" id="backlog">Go To Backlog</button></td>
+				</form>
+				</tr>
+			</table>
+			<!--<p style="margin-top: 20px;margin-left: 50px; font-size: 20px">
+			Successfully copied tasks from project <span id="projectA"></span> to project <span id="projectB"></span> <button class="aui-button" style="align:right;" id="backlog">Go To Backlog</button></p>-->
+		</div>
+		<p style="margin-top: 20px; margin-left: 50px;font-size: 15px">Below is the list of all issues you have copied just now. They were placed in the project backlog and you can always find 
 		them  there to start grooming the backlog and planning active sprints. You can quickly navigate from here to get into selected issue type details</p>
-		<div class="col-md-1"></div>
-			<div class="col-md-10" id="innerhtml">
-			</div>
-			<div class="col-md-1"></div>
+		
+			<div style="margin-left: 50px;" id="innerhtml">
 			</div>
 			<div class="row" id="pagination">
 			<!--<div id="listingTable"></div>
@@ -195,13 +207,13 @@
 			document.getElementsByTagName("head")[0].appendChild(script);
 		})();
 	</script>
-	<script language="JavaScript" type="text/javascript">
+	<!--script language="JavaScript" type="text/javascript">
         var toggle = document.getElementById('load-custom-issues');
         toggle.addEventListener('change', function(e) {
                       $("#copy-issues-list").toggleClass('hidden');
                       $("#load-custom-issues-list").toggleClass('hidden');
         });
-	</script>
+	</script-->
 	<script language="javaScript" type="text/javascript">
 
 	</script>

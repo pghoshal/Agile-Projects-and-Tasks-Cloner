@@ -21,6 +21,14 @@ public class IssueCopyResponse {
 	@SerializedName("destUrl")
 	@Expose
 	private String destUrl;
+	@SerializedName("sourceProjectName")
+	@Expose
+	private String sourceProjectName;
+	@SerializedName("destProjectName")
+	@Expose
+	private String destProjectName;
+	
+	
 
 	public String getSource() {
 		return source;
@@ -52,6 +60,22 @@ public class IssueCopyResponse {
 
 	public void setDestUrl(String destUrl) {
 		this.destUrl = destUrl;
+	}
+
+	public String getSourceProjectName() {
+		return sourceProjectName;
+	}
+
+	public void setSourceProjectName(String sourceProjectName) {
+		this.sourceProjectName = sourceProjectName;
+	}
+
+	public String getDestProjectName() {
+		return destProjectName;
+	}
+
+	public void setDestProjectName(String destProjectName) {
+		this.destProjectName = destProjectName;
 	}
 
 }

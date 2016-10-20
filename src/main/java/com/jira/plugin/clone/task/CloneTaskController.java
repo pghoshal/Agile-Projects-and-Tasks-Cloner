@@ -167,9 +167,11 @@ public class CloneTaskController
 			if(issueCreateresponse!=null || customIssueCreateresponse != null){
 				final IssueCopyResponse result = new IssueCopyResponse();
 				result.setSource(issueKey);
+				result.setSourceProjectName(projectFrom);
 				result.setUrl(copyIssueDTO.getBaseUrl()+"/browse/"+issueKey);
 				result.setDestination(dest);
 				result.setDestUrl(copyIssueDTO.getBaseUrl()+"/browse/"+dest);
+				result.setDestProjectName(copyIssueDTO.getProjectB());
 				resultList.add(result);
 				issueCreateresponse = null;dest = null;
 				customIssueCreateresponse = null;
