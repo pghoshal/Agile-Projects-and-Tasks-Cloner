@@ -9,6 +9,13 @@ $("button#jQueryColorChange").on('click',function(){
     $(this).toggleClass('selected');
 });
 
+$("#gobacklog").on('click',function(){
+   var jiraUrl=$("#baseUrl").val();
+   var redirectProj=$("#sync-product-single-select-2").val();
+   var url=jiraUrl+"/secure/RapidBoard.jspa?projectKey="+redirectProj+"&view=planning.nodetail";
+   window.open(url, '_blank');
+});
+
 AJS.$(".dialog-show-button-custom").click(function() {
     AJS.dialog2("#demo-dialog").show();
 });

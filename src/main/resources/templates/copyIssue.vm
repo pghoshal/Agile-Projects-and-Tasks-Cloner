@@ -154,9 +154,9 @@
 				<td >Successfully copied tasks from project <span id="projectA"></span> to project <span id="projectB"></span></td>
 				
 				<td  align="right" style="margin-right: 100px;" >
-				<form action="/secure/RapidBoard.jspa?projectKey={$("#sync-product-single-select-2").val()}&view=planning.nodetail">
-					<button class="aui-button" style="align:right;" id="backlog">Go To Backlog</button></td>
-				</form>
+				
+					<button class="aui-button" style="align:right;" id="gobacklog" >Go To Backlog</button></td>
+				
 				</tr>
 			</table>
 			
