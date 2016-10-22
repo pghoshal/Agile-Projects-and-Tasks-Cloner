@@ -137,15 +137,20 @@
                   	  </fieldset>
                   	</td>
 					</tr>
+					
 					<tr>
 					<hr/>
+					
 					<td>&nbsp;</td><td>&nbsp;</td>
+					
 						<td style="margin-top: 20px;margin-left: 40px;">
 						<div class="buttons-container">
+						
          					<div class="buttons">
          						<input class="aui-button aui-button-primary submit" type="submit" value="Copy" id="load-all-button">
             					<a class="cancel" href="#">Cancel</a>
          					</div>
+         					
      					</div>
 						</td>
 					</tr>
