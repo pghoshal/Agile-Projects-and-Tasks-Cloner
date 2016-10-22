@@ -1,21 +1,37 @@
 $(document).ready(function() {
+	var dataTable=$('#example').DataTable();
 	document.getElementById('customissues').style.display='none';
 	document.getElementById('issues').style.display='';
-	//document.getElementById('result-page').style.display='none';
+	document.getElementById('result-page').style.display='none';
 	document.getElementById('front-page').style.display='';
 	
 	$("#progress-bar").hide();
 $("button#jQueryColorChange").on('click',function(){
     $(this).toggleClass('selected');
 });
-
+$('#example').DataTable();
 $("#gobacklog").on('click',function(){
    var jiraUrl=$("#baseUrl").val();
    var redirectProj=$("#sync-product-single-select-2").val();
    var url=jiraUrl+"/secure/RapidBoard.jspa?projectKey="+redirectProj+"&view=planning.nodetail";
    window.open(url, '_blank');
 });
-
+//$("sync-product-single-select-2").on('change',function(){
+//	   
+//	   var proj2=$("#sync-product-single-select-2").val();
+//	   var proj1=$("#sync-product-single-select-1").val();
+//	   if(proj2==proj1){
+//		   alert("From and To project can't be same")
+//	   }
+//	});
+//
+//$("sync-product-single-select-1").on('change',function(){
+//	 var proj2=$("#sync-product-single-select-2").val();
+//	   var proj1=$("#sync-product-single-select-1").val();
+//	   if(proj2==proj1){
+//		   alert("From and To project can't be same")
+//	   }
+//	});
 AJS.$(".dialog-show-button-custom").click(function() {
     AJS.dialog2("#demo-dialog").show();
 });
@@ -117,13 +133,14 @@ $("#load-all-button").on('click' ,function(){
 		    processData: false,
 		    success: function( data, textStatus, jQxhr ){
 		    	//alert('Success response : ');
+		    	
 		    	$("#progress-bar").hide();
 		    	var i =0;
 		    	var responses = [];
 		    	responses = data;
 		    	//alert(JSON.stringify(data))
 		    	//Populate projectFrom and projectTo
-		    	var list = '<table class="table table-bordered">';
+		    	var list = '';
 		    	var j=0;
 		    	for(i=0;i<responses.length;i++){
 		    		j=1;
@@ -134,17 +151,39 @@ $("#load-all-button").on('click' ,function(){
 		    	    '<p>Issue URL : '+responses[i].self +'</p>'+
 		    	    '<p>Created Issue Id : <a href='+responses[i].destUrl+' target="_blank">'+responses[i].destination +'</a></p>'+
 		    	'</div>';*/
-		    		list = list + '<tr><td headers="name"> <a href='+responses[i].destUrl+' target="_blank">'+responses[i].destination +'</a></td></tr>';
+		    		list = list + '<tr><td> <a href='+responses[i].destUrl+' target="_blank">'+responses[i].destination +'</a></td></tr>';
 		    		//list = list + '<p style="margin-left: 65px;"> Issue URL : '+responses[i].self+'</p>' +'<p style="margin-left: 65px;"> Issue Id : '+responses[i].key+'</p>';
 		    	}
 		    	if(responses.length>0){
+		    		dataTable.clear();
 		    		$('#projectA').html(dd1);
 		    		$('#projectB').html(dd2);
-		    		list = list+'</table>';
-		    		$('#innerhtml').html(list);
+		    		$list = $(list);
+		    		 for (var tr=0;tr<$list.length;tr++) {
+		    		        var tds = $($list[tr]).find('td');
+		    		        var cols = [];
+		    		        for (var td=0;td<tds.length;td++) {
+		    		            cols.push($(tds[td]).html());
+		    		        }
+		    		        dataTable.row.add(cols);
+		    		    }
+		    		    dataTable.draw();
+		    		//$('#innerhtml').html(list);
 		    	}else{
-		    		$('#innerhtml').html('<table class="table table-bordered"><tr><td><center><p>No Such Issues are available to Copy</p></center></td></tr></table>');
+		    		dataTable.clear();
+		    		var fail='<tr><td><center><p>No Such Issues are available to Copy</p></center></td></tr>';
+		    		$fail = $(fail);
+		    		 for (var tr=0;tr<$fail.length;tr++) {
+		    		        var tds = $($fail[tr]).find('td');
+		    		        var cols = [];
+		    		        for (var td=0;td<tds.length;td++) {
+		    		            cols.push($(tds[td]).html());
+		    		        }
+		    		        dataTable.row.add(cols);
+		    		    }
+		    		    dataTable.draw();
 		    	}
+		    	//dataTable.draw();
 		    	document.getElementById('front-page').style.display='none';
 		    	document.getElementById('result-page').style.display='';
 		    },
@@ -163,11 +202,13 @@ $("#load-all-button").on('click' ,function(){
 	
 });
 
-$("#load-custom-issues1").on("change", function (){
+$("#load-custom-issues").on("change", function (){
 	
 	var dd1=$("#sync-product-single-select-1").val();
 	if(dd1==''){
 		alert('Please select Issue from project');
+		//$('input:checkbox[name=checktoggle]').attr('checked',false);
+		//$('input:checkbox[name=checktoggle]').prop('checked', false);
 	}else{
 	$("#progress-bar").show();
 	$.ajax({
@@ -181,6 +222,7 @@ $("#load-custom-issues1").on("change", function (){
 	        var array=[];
 	        array = data;
 	        var options='';
+	        
 	        for (var i = 0; i < array.length; i++) {
 	        	options  = options +'<div class="checkbox">'+
 	        				'<input class="checkbox" type="checkbox" name="'+ array[i]+'" id="copy-'+array[i]+'">'+

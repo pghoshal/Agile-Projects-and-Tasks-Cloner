@@ -15,6 +15,10 @@
 <link rel="stylesheet" type="text/css"
 	href="//aui-cdn.atlassian.com/aui-adg/6.0.0/css/aui-experimental.css" />
 <link rel="stylesheet" type="text/css" href="/css/custom.css" />
+
+<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
+
 <script src="/js/sinon.js"></script>
 
 <link rel="stylesheet"
@@ -23,7 +27,11 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="/js/custom.js"></script>
-
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<script src="//code.jquery.com/jquery-1.12.3.js"></script>
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
 </head>
 <body>
 	<!-- <section id="content" role="main">-->
@@ -73,7 +81,7 @@
 						</td>
 						<td>&nbsp;&nbsp;</td>
 						<td style="margin-top: 20px;">
-							<aui-toggle id="load-custom-issues" tooltip-on="Enabled" tooltip-off="Disabled"></aui-toggle>
+						<input type="checkbox" data-toggle="toggle" data-onstyle="success" id="load-custom-issues" data-on="Enabled" data-off="Disabled" name="checktoggle">
 						</td>
 					</tr>
 					<tr class="group" id="issues">
@@ -164,23 +172,26 @@
 		<p style="margin-top: 20px; margin-left: 50px;font-size: 15px">Below is the list of all issues you have copied just now. They were placed in the project backlog and you can always find 
 		them  there to start grooming the backlog and planning active sprints. You can quickly navigate from here to get into selected issue type details</p>
 		
-			<div style="margin-left: 50px;" id="innerhtml">
+			<div style="margin-left: 50px;" >
 			</div>
-			<div class="row" id="pagination">
-			<!--<div id="listingTable"></div>
-				<a href="javascript:prevPage()" id="btn_prev">Prev</a>
-				<a href="javascript:nextPage()" id="btn_next">Next</a>-->
-			 <!--<ol class="aui-nav aui-nav-pagination">
-    			<li class="aui-nav-previous"><a href="#">Prev</a></li>
-    			<li><a href="http://example.com/">1</a></li>
-    			<li class="aui-nav-selected">2</li>
-    			<li><a href="http://example.com/">3</a></li>
-    			<li class="aui-nav-truncation"><a href="http://example.com/" id="pagination-truncation">&hellip;</a></li>
-    			<li><a href="http://example.com/">998</a></li>
-    			<li><a href="http://example.com/">999</a></li>
-    			<li class="aui-nav-next"><a href="#">Next</a></li>
-			 </ol>-->
-			</div>
+			<div class="row"  style="margin-top: 15px;">
+			<div class="col-md-2"></div>
+			<div class="col-md-8">
+			<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+			 <thead>
+			 <tr>
+                <th>Issues</th>
+                
+			 </tr>
+			 </thead>
+	
+			 <tbody id="innerhtml">
+			
+			 </tbody>
+		    </table>
+		    </div>
+		    <div class="col-md-2"></div>
+	</div>
 	</div>
 	
 	<script id="connect-loader" data-options="sizeToParent:true;">
