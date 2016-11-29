@@ -57,10 +57,12 @@
 						</td>
 						<td>&nbsp;&nbsp;</td>
 						<td style="margin-top: 20px;">
-							<aui-select id="sync-product-single-select-1" name="product"
-								placeholder="From project"> #foreach($project in
-							$projectList) <aui-option value="$project.key">$project.name</aui-option>
-							#end </aui-select>
+							<select id="sync-product-single-select-1" class="select" name="product" placeholder="From project">
+								<option>Select a Project..</option> 
+								#foreach($project in $projectList) 
+									<option value="$project.key">$project.name</option>
+								#end 
+							</select>
 						</td>
 					</tr>
 					<tr>
@@ -69,10 +71,14 @@
 						</td>
 						<td>&nbsp;&nbsp;</td>
 						<td style="margin-top: 20px;">
-							<aui-select id="sync-product-single-select-2" name="product"
-								placeholder="To project"> #foreach($project in
-							$projectList) <aui-option value="$project.key">$project.name</aui-option>
-							#end </aui-select>
+							<div id="select">
+							<select id="sync-product-single-select-2" class="select" name="product" placeholder="To project">
+									<option>Select a Project..</option>
+								#foreach($project in $projectList) 
+									<option value="$project.key">$project.name</option>
+								#end 
+							</select>
+						</div>
 						</td>
 					</tr>
 					<tr>
@@ -81,7 +87,8 @@
 						</td>
 						<td>&nbsp;&nbsp;</td>
 						<td style="margin-top: 20px;">
-						<input type="checkbox" data-toggle="toggle" data-onstyle="success" id="load-custom-issues" data-on="Enabled" data-off="Disabled" name="checktoggle">
+						<aui-toggle id="load-custom-issues" label="Load custom issues"></aui-toggle>
+						<!--input type="checkbox" 	id="toggle-button-id" data-toggle="toggle" data-onstyle="success" data-on="Custom Issues" data-off="Issues "-->
 						</td>
 					</tr>
 					<tr class="group" id="issues">
@@ -122,7 +129,9 @@
                   	</tr>
                   	<tr class="group" id="customissues">
                   	  <td style="margin-top: 20px;align:right;">
+                  	  	<div id="load">
                   	  	<span>Load</span>
+                  	  	</div>
                   	  </td>	
                   	  <td>&nbsp;&nbsp;</td>
                   	  <td>
@@ -229,7 +238,12 @@
         });
 	</script-->
 	<script language="javaScript" type="text/javascript">
-
+/*$(function() {
+    		$('#toggle-button-id').bootstrapToggle({
+      			on: 'Custom Issues',
+      			off: 'Issues'
+    		});
+  		})*/
 	</script>
 </body>
 </html>

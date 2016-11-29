@@ -5,7 +5,7 @@
   "description": "Agile Projects and Tasks Cloner",
   "vendor": {
         "name": "Silverlining Technologies Ltd.",
-        "url": "http://www.google.com"
+        "url": "http://thesilverlining.eu"
     },
   "authentication": {
     "type": "jwt"
