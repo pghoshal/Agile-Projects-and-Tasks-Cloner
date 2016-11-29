@@ -12,15 +12,20 @@ $("button#jQueryColorChange").on('click',function(){
 
 var flag = true;
 
-$("#load-custom-issues").on("change", function (){
+$("#load-custom-issues").on("click", function (){
 	//alert("working");
+	document.getElementById("load-custom-issues").disabled = true;
+	
 	if(flag){
 	//var state = $('#toggle-demo').bootstrapToggle('toggle');
 	//alert(state.on);
 	flag =false;
 	//document.getElementById('issues').style.display='none'
 	var dd1=$("#sync-product-single-select-1").val();
-	if(dd1==''){
+	if(dd1=='Select a Project..'){
+		$("#load-custom-issues").removeAttr("checked");
+		document.getElementById("load-custom-issues").disabled = false;
+		flag = true;
 		alert('Please select Issue from project');
 	}else{
 	$("#progress-bar").show();
@@ -58,24 +63,29 @@ $("#load-custom-issues").on("change", function (){
 	        	document.getElementById('load').style.display='';
 	        }
 	        $("#progress-bar").hide();
+	        document.getElementById("load-custom-issues").disabled = false;
 	    },
 	    error: function( jqXhr, textStatus, errorThrown ){
 	        alert("PLEASE SELECT A PROJECT FROM COPY");
 	        $("#progress-bar").hide();
-	        document.getElementById('load-custom-issues').check = false;
+	       
+	        $("#load-custom-issues").removeAttr("checked");
 	        document.getElementById('issues').style.display='';
 	        document.getElementById('load').style.display='none';
         	document.getElementById('customissues').style.display='none';
+        	document.getElementById("load-custom-issues").disabled = false;
 	    }
 	 });
 	}
 	flag = false;
 	}else {
 		flag = true;
+		document.getElementById("load-custom-issues").disabled = false;
 		document.getElementById('customissues').style.display='none';
     	document.getElementById('issues').style.display='';
     	document.getElementById('load').style.display='none';
 	}
+	
 });
 $('#example').DataTable();
 $("#gobacklog").on('click',function(){
