@@ -249,7 +249,7 @@ $("#load-all-button").on('click' ,function(){
 		    		//$('#innerhtml').html(list);
 		    	}else{
 		    		dataTable.clear();
-		    		var fail='<tr><td><center><p>No Such Issues are available to Copy</p></center></td></tr>';
+		    		var fail='<tr><td><center><p>No Issues available to Copy</p></center></td></tr>';
 		    		$fail = $(fail);
 		    		 for (var tr=0;tr<$fail.length;tr++) {
 		    		        var tds = $($fail[tr]).find('td');
