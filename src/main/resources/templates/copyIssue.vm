@@ -111,19 +111,16 @@
                       		</div>
                       		<div class="checkbox">
                           		<input type="checkbox" name="check_tasks" value="story" id="copy-story">
-                          		<label for="checkBoxOne">User stories</label>
+                          		<label for="checkBoxOne">Story</label>
                       		</div>
-                      		<div class="checkbox">
-                          		<input type="checkbox" name="check_tasks" value="request" id="copy-request">
-                          		<label for="checkBoxTwo">Feature requests</label>
-                      		</div>
+                      		
                       		<div class="checkbox">
                           		<input type="checkbox" name="check_tasks" value="bug" id="copy-bug">
-                          		<label for="checkBoxThree">Bugs</label>
+                          		<label for="checkBoxThree">Bug</label>
                       		</div>
                       		<div class="checkbox">
-                          		<input type="checkbox" name="check_tasks" value="sub-task" id="copy-subtask">
-                          		<label for="checkBoxThree">Sub tasks</label>
+                          		<input type="checkbox" name="check_tasks" value="epic" id="copy-epic">
+                          		<label for="checkBoxThree">Epic</label>
                       		</div>
                       		</td>
                       </tr>
