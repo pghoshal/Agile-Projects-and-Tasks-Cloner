@@ -9,6 +9,7 @@
 <script src="//aui-cdn.atlassian.com/aui-adg/6.0.0/js/aui-experimental.js"></script>	
 <script
 	src="//aui-cdn.atlassian.com/aui-adg/5.10.1/js/aui-datepicker.js"></script>
+<script src="/js/require.min.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="//aui-cdn.atlassian.com/aui-adg/6.0.0/css/aui.css" />
 <link rel="stylesheet" type="text/css"
@@ -26,7 +27,8 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="/js/custom.js"></script>
-
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <script src="//code.jquery.com/jquery-1.12.3.js"></script>
 <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
@@ -89,7 +91,7 @@
 						
 						<label class="switch1">
   							<input type="checkbox" id="load-custom-issues">
-  									<div class="slider1 round1"></div>
+  									<div class="slider1"></div>
 						</label>
 						
 						<!--input type="checkbox" 	id="toggle-button-id" data-toggle="toggle" data-onstyle="success" data-on="Custom Issues" data-off="Issues "-->
@@ -231,13 +233,13 @@
 			document.getElementsByTagName("head")[0].appendChild(script);
 		})();
 	</script>
-	<!--script language="JavaScript" type="text/javascript">
+	<script language="JavaScript" type="text/javascript">
         var toggle = document.getElementById('load-custom-issues');
         toggle.addEventListener('change', function(e) {
                       $("#copy-issues-list").toggleClass('hidden');
                       $("#load-custom-issues-list").toggleClass('hidden');
         });
-	</script-->
+	</script>
 	<script language="javaScript" type="text/javascript">
 /*$(function() {
     		$('#toggle-button-id').bootstrapToggle({
