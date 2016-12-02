@@ -21,8 +21,8 @@ td
 .switch1 {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 48px;
+  height: 25px;
 }
 
 .switch1 input {display:none;}
@@ -42,8 +42,8 @@ td
 .slider1:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
+  height: 18px;
+  width: 20px;
   left: 4px;
   bottom: 4px;
   background-color: white;
@@ -60,9 +60,9 @@ input:focus + .slider1 {
 }
 
 input:checked + .slider1:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+  -webkit-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  transform: translateX(18px);
 }
 
 /* Rounded sliders */
